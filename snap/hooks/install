@@ -1,0 +1,17 @@
+#!/bin/sh -e
+
+# parameters to be set by the user
+snapctl set storage-server!
+snapctl set storage-user!
+snapctl set topic-regex!
+snapctl set topic-exclude!
+
+# default parameters
+
+snapctl set max-bag-duration=300 # 5 mins
+snapctl set max-bag-size=250000000 # 250 MB
+
+if ! snapctl is-connected ssh-keys; then
+  logger -t ${SNAP_NAME} "Plug 'ssh-keys' isn't connected, \
+    please run: snap connect $SNAP_NAME:ssh-keys"
+fi

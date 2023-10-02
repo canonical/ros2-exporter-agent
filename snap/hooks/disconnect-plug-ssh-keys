@@ -1,0 +1,3 @@
+#!/bin/sh -e
+
+snapctl stop --disable ${SNAP_NAME}.synchronization 2>&1 || true
