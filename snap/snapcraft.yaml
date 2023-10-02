@@ -6,6 +6,26 @@ description: |
   The ROS 2 data exporter is recording ROS 2 data
   and exporting them on a server for later consultation
 
+  Connect the ssh-keys with:
+
+   sudo snap connect ros2-exporter-agent:ssh-keys
+
+  Mandatory parameters:
+   
+   # synchronization
+   storage-server
+   storage-user
+
+  Optional parameters:
+
+   # topic recorded (default to all)
+   topic-regex
+   topic-exclude
+
+   # bag parameters
+   max-bag-duration # 5 mins
+   max-bag-size # 250 MB
+
 grade: devel
 confinement: strict
 
