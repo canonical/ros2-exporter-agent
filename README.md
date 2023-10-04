@@ -30,7 +30,7 @@ Host <my_remote_server_domain>
     IdentityFile ~/.ssh/<my_private_key>
 ```
 
-### Cerver setup
+### Server setup
 - Install Ubuntu
 - Install `openssh-server`
 - Copy the public key of the client in the `~/.ssh/authorized_keys`
