@@ -11,10 +11,9 @@ In order for the synchronization to function, a server must be setup.
 
 ### Client setup
 - Generate an ssh key to access the server
-- Place the ssh key as well as the `config` file in `/root/.ssh` (the syncronization daemon will be running as root)
-- Connect the ssh-keys plug: `sudo snap connect ros2-exporter-agent:ssh-keys`
+- Place the ssh key as well as the `config` file in `/root/snap/ros2-exporter-agent/common/.ssh` (the syncronization daemon will be running as root)
 
-The `/root/.ssh` content should look like:
+The `/root/snap/ros2-exporter-agent/common/.ssh` content should look like:
 ```
 drwx------  2 root root 4.0K sept. 29 16:32 .
 drwx------ 14 root root 4.0K sept. 29 16:32 ..
@@ -27,7 +26,7 @@ The `config` file should look like:
 ```
 Host <my_remote_server_domain>
     User <server_user>
-    IdentityFile ~/.ssh/<my_private_key>
+    IdentityFile /root/snap/ros2-exporter-agent/common/.ssh/<my_private_key>
 ```
 
 ### Server setup

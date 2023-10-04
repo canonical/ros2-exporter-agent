@@ -6,9 +6,9 @@ description: |
   The ROS 2 data exporter is recording ROS 2 data
   and exporting them on a server for later consultation
 
-  Connect the ssh-keys with:
+  Add you private ssh-key and config file for the storage server in:
 
-   sudo snap connect ros2-exporter-agent:ssh-keys
+   /root/snap/ros2-exporter-agent/common/.ssh/
 
   Mandatory parameters:
    
@@ -210,7 +210,7 @@ apps:
     daemon: simple
     install-mode: disable
     timer: "00:00-24:00/288" # every 5 minutes
-    plugs: [network, network-bind, ssh-keys]
+    plugs: [network, network-bind]
   day-rotation:
     command: usr/bin/day-rotation.sh
     daemon: simple

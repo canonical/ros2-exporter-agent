@@ -9,8 +9,3 @@ snapctl set topic-exclude!
 
 snapctl set max-bag-duration=300 # 5 mins
 snapctl set max-bag-size=250000000 # 250 MB
-
-if ! snapctl is-connected ssh-keys; then
-  logger -t ${SNAP_NAME} "Plug 'ssh-keys' isn't connected, \
-    please run: snap connect $SNAP_NAME:ssh-keys"
-fi
