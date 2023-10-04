@@ -38,7 +38,6 @@ Host <my_remote_server_domain>
 
 ## Snap parameters
 - `storage-server`, url of the synchronization server | unset by default
-- `storage-user`, user of the synchronization server | unset by default
 - `topic-regex`, topic regex to record for the bag recording, override the default "all" behaviour | unset by default
 - `topic-exclude`, topic regex to exclude for the bag recording, works on top of "all" and `topic-regex`. | unset by default
 - `max-bag-duration`, maximum bag duration in seconds before the bag file is split | default to: 300

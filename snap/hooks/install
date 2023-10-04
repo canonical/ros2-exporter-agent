@@ -2,7 +2,6 @@
 
 # parameters to be set by the user
 snapctl set storage-server!
-snapctl set storage-user!
 snapctl set topic-regex!
 snapctl set topic-exclude!
 

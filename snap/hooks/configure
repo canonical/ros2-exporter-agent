@@ -1,11 +1,10 @@
 #!/bin/sh -e
 
 STORAGE_SERVER="$(snapctl get storage-server)"
-STORAGE_USER="$(snapctl get storage-user)"
 
-if [ -n "${STORAGE_SERVER}" ] && [ -n "${STORAGE_USER}" ] && $(snapctl is-connected ssh-keys); then
+if [ -n "${STORAGE_SERVER}" ] && $(snapctl is-connected ssh-keys); then
     if snapctl services ${SNAP_INSTANCE_NAME}.synchronization | grep -q inactive; then
-        logger -t ${SNAP_INSTANCE_NAME} "Storage server and user set, \
+        logger -t ${SNAP_INSTANCE_NAME} "Storage server set, \
             starting the synchronization"
         snapctl start --enable $SNAP_INSTANCE_NAME.synchronization 2>&1 || true
     fi

@@ -1,10 +1,9 @@
 #!/usr/bin/bash -e
 
 STORAGE_SERVER="$(snapctl get storage-server)"
-STORAGE_USER="$(snapctl get storage-user)"
 
-if [[ -z "${STORAGE_SERVER}" ]] || [[ -z "${STORAGE_USER}" ]]; then
-        echo "Please set storage-server and storage-user. Exiting..."
+if [[ -z "${STORAGE_SERVER}" ]]; then
+        echo "Please set storage-server. Exiting..."
         exit 1
 fi
 
@@ -13,5 +12,4 @@ if ! snapctl is-connected ssh-keys; then
     exit 1
 fi
 
-# StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null are necessary because the ssh-key plug is read only and .ssh/known_hosts must be extended and checked.
-rsync -avz -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --min-size=1 $SNAP_COMMON/ $STORAGE_USER@$STORAGE_SERVER:~/$HOSTNAME/
+rsync -avz -e "ssh -F $SNAP_USER_COMMON/.ssh/config" --min-size=1 $SNAP_COMMON/ $STORAGE_SERVER:~/$HOSTNAME/
