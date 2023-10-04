@@ -211,8 +211,8 @@ apps:
     install-mode: disable
     timer: "00:00-24:00/288" # every 5 minutes
     plugs: [network, network-bind]
-  day-rotation:
-    command: usr/bin/day-rotation.sh
+  daily-rotation:
+    command: usr/bin/daily-rotation.sh
     daemon: simple
     timer: "00:00" # every day at midnight
   auto-clean:
