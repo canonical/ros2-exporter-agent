@@ -1,0 +1,4 @@
+#!/bin/sh -e
+
+# nothing to do here
+# file is necessary so the `snap set` command can be used
