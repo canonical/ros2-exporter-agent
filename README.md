@@ -24,9 +24,16 @@ drwx------ 14 root root 4.0K sept. 29 16:32 ..
 
 The `config` file should look like:
 ```
-Host <my_remote_server_domain>
+Host storage-server
     User <server_user>
+    HostName <server_hostname>
     IdentityFile /root/snap/ros2-exporter-agent/common/.ssh/<my_private_key>
+    UserKnownHostsFile /root/snap/ros2-exporter-agent/common/.ssh/known_hosts
+```
+
+If the known_hosts is not created, we can create it with:
+```
+sudo ssh-keyscan -H <server_hostanme> >> /root/snap/ros2-exporter-agent/common/.ssh/known_hosts
 ```
 
 ### Server setup

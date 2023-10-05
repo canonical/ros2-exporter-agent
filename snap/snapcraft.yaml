@@ -10,10 +10,15 @@ description: |
 
    /root/snap/ros2-exporter-agent/common/.ssh/
 
-  Mandatory parameters:
-   
-   # synchronization
-   storage-server
+  The `config` file should look like:
+
+  ```
+  Host storage-server
+      User <server_user>
+      HostName <server_hostname>
+      IdentityFile /root/snap/ros2-exporter-agent/common/.ssh/<my_private_key>
+      UserKnownHostsFile /root/snap/ros2-exporter-agent/common/.ssh/known_hosts
+  ```
 
   Optional parameters:
 
@@ -37,6 +42,7 @@ parts:
     stage-packages:
       - fd-find
       - iputils-ping
+      - openssh-client
       - ros-humble-rosbag2
       - ros-humble-rosbag2-storage-mcap
       - rsync

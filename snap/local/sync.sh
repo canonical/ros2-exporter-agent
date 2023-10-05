@@ -7,4 +7,4 @@ if [[ -z "${STORAGE_SERVER}" ]]; then
         exit 1
 fi
 
-rsync -avz -e "ssh -F $SNAP_USER_COMMON/.ssh/config" --min-size=1 $SNAP_COMMON/ $STORAGE_SERVER:~/$HOSTNAME/
+rsync -avz -e "ssh -F $SNAP_USER_COMMON/.ssh/config" --min-size=1 $SNAP_COMMON/ storage-server:~/$HOSTNAME/
