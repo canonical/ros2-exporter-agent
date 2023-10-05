@@ -22,6 +22,9 @@ description: |
 
   Optional parameters:
 
+   # server parameter
+   storage-path (default to ~/$HOSTNAME)
+
    # topic recorded (default to all)
    topic-regex
    topic-exclude
@@ -214,7 +217,6 @@ apps:
   synchronization:
     command: usr/bin/sync.sh
     daemon: simple
-    install-mode: disable
     timer: "00:00-24:00/288" # every 5 minutes
     plugs: [network, network-bind]
   daily-rotation:

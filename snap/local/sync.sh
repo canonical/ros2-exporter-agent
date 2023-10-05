@@ -1,10 +1,5 @@
 #!/usr/bin/bash -e
 
-STORAGE_SERVER="$(snapctl get storage-server)"
+STORAGE_PATH="$(snapctl get storage-path)"
 
-if [[ -z "${STORAGE_SERVER}" ]]; then
-        echo "Please set storage-server. Exiting..."
-        exit 1
-fi
-
-rsync -avz -e "ssh -F $SNAP_USER_COMMON/.ssh/config" --min-size=1 $SNAP_COMMON/ storage-server:~/$HOSTNAME/
+rsync -avz -e "ssh -F $SNAP_USER_COMMON/.ssh/config" --min-size=1 $SNAP_COMMON/ storage-server:$STORAGE_PATH
