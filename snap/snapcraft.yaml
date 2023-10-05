@@ -20,6 +20,9 @@ description: |
       UserKnownHostsFile /root/snap/ros2-exporter-agent/common/.ssh/known_hosts
   ```
 
+  The daemon daily-rotation will move the bags to a new timestamped directory at midnight.
+  Make sure to have properly configured the time on the machine.
+
   Optional parameters:
 
    # server parameter

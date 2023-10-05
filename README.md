@@ -35,6 +35,7 @@ If the known_hosts is not created, we can create it with:
 ```
 sudo ssh-keyscan -H <server_hostanme> >> /root/snap/ros2-exporter-agent/common/.ssh/known_hosts
 ```
+- The daemon daily-rotation will move the bags to a new timestamped directory at midnight. Make sure to have properly configured the time on the machine. This can be verified with `timedatectl status`.
 
 ### Server setup
 - Install Ubuntu
