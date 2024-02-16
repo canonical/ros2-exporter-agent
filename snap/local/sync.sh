@@ -2,7 +2,7 @@
 
 ROBOT_ID=$(cat $SNAP_COMMON/robot_id.txt)
 
-STORAGE_PATH="~/$HOSTNAME/$ROBOT_ID"
+STORAGE_PATH="~/$ROBOT_ID"
 
 snapctl set storage-path=$STORAGE_PATH
 
