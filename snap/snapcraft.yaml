@@ -40,7 +40,7 @@ grade: devel
 confinement: strict
 
 plugs:
-  common-content-read:
+  rob-cos-common-data-read:
     interface: content
     content: readable-data
     target: $SNAP_COMMON
@@ -229,7 +229,7 @@ apps:
     daemon: simple
     install-mode: disable
     timer: "00:00-24:00/288" # every 5 minutes
-    plugs: [network, network-bind, common-content-read]
+    plugs: [network, network-bind, rob-cos-common-data-read]
   daily-rotation:
     command: usr/bin/daily-rotation.sh
     daemon: simple
