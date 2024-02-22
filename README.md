@@ -46,7 +46,6 @@ sudo ssh-keyscan -H <server_hostanme> >> /root/snap/ros2-exporter-agent/common/.
 ## Snap parameters
 - `topic-regex`, topic regex to record for the bag recording, override the default "all" behaviour | unset by default
 - `topic-exclude`, topic regex to exclude for the bag recording, works on top of "all" and `topic-regex`. | unset by default
-- `storage-path`, path on the server to store the synchronized data | default to: "~/$HOSTNAME"
+- `storage-base-path`, path on the server to store the synchronized data | default to: "~/$HOSTNAME"
 - `max-bag-duration`, maximum bag duration in seconds before the bag file is split | default to: 300
 - `max-bag-size`, maximum bag size in bytes before the bag file is split | default to: 250000000
-

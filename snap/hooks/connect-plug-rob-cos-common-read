@@ -1,0 +1,9 @@
+#!/bin/sh -e
+
+snapctl stop --disable ${SNAP_NAME}.auto-clean 2>&1 || true
+
+snapctl stop --disable ${SNAP_NAME}.recorder 2>&1 || true
+
+snapctl stop --disable ${SNAP_NAME}.synchronization 2>&1 || true
+
+snapctl stop --disable ${SNAP_NAME}.daily-rotation 2>&1 || true
