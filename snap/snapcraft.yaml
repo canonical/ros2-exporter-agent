@@ -39,6 +39,11 @@ description: |
 grade: devel
 confinement: strict
 
+plugs:
+  rob-cos-common-read:
+    interface: content
+    target: $SNAP_COMMON
+
 parts:
   local-files:
     plugin: dump
@@ -215,18 +220,22 @@ apps:
   recorder:
     command: usr/bin/record.sh
     daemon: simple
+    install-mode: disable
     extensions: [ros2-humble]
     plugs: [network, network-bind]
   synchronization:
     command: usr/bin/sync.sh
     daemon: simple
+    install-mode: disable
     timer: "00:00-24:00/288" # every 5 minutes
-    plugs: [network, network-bind]
+    plugs: [network, network-bind, rob-cos-common-read]
   daily-rotation:
     command: usr/bin/daily-rotation.sh
     daemon: simple
+    install-mode: disable
     timer: "00:00" # every day at midnight
   auto-clean:
     command: usr/bin/auto-clean.sh
     daemon: simple
+    install-mode: disable
     timer: "00:00-24:00/96" # every 15 minutes

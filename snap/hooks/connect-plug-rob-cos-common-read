@@ -1,0 +1,24 @@
+#!/bin/sh -e
+
+# now we can start the services
+if snapctl services ${SNAP_NAME}.auto-clean | grep -q inactive; then
+  snapctl start --enable ${SNAP_NAME}.auto-clean 2>&1 || true
+fi
+
+## if auto-clean started correctly we can start recording
+if snapctl services ${SNAP_NAME}.auto-clean | grep -q enabled; then
+  if snapctl services ${SNAP_NAME}.recorder | grep -q inactive; then
+    snapctl start --enable ${SNAP_NAME}.recorder 2>&1 || true
+  fi
+else
+  echo "auto-clean service not enabled - could not start recorder to avoid filling up disk"
+  exit 1
+fi
+
+if snapctl services ${SNAP_NAME}.synchronization | grep -q inactive; then
+  snapctl start --enable ${SNAP_NAME}.synchronization 2>&1 || true
+fi
+
+if snapctl services ${SNAP_NAME}.daily-rotation | grep -q inactive; then
+  snapctl start --enable ${SNAP_NAME}.daily-rotation 2>&1 || true
+fi
