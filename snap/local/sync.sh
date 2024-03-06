@@ -8,32 +8,32 @@ if [ -n "$DEVICE_ID" ]; then
     STORAGE_PATH="${STORAGE_PATH%/}/$DEVICE_ID"
     snapctl set storage-path=$STORAGE_PATH
 else
-    echo "DEVICE_ID is not set. Make sure it's available in the rob-cos-data-sharing snap."
+    >&2 echo "DEVICE_ID is not set. Make sure it's available in the rob-cos-data-sharing snap."
 fi
 
 if [ ! -d $SNAP_USER_COMMON/.ssh ]; then
     mkdir $SNAP_USER_COMMON/.ssh
 fi
 
-if [ -f $SNAP_COMMON/device_private_key ]; then
-    cp $SNAP_COMMON/device_private_key  $SNAP_USER_COMMON/.ssh/
+if [ -f $SNAP_COMMON/device_rsa_key ]; then
+    cp $SNAP_COMMON/device_rsa_key  $SNAP_USER_COMMON/.ssh/
 else
-    echo "could not find private_key"
+    >&2 echo "could not find device_rsa_key"
 fi
-if [ -f $SNAP_COMMON/device_public_key.pub ]; then
-    cp $SNAP_COMMON/device_public_key.pub  $SNAP_USER_COMMON/.ssh/
+if [ -f $SNAP_COMMON/device_rsa_key.pub ]; then
+    cp $SNAP_COMMON/device_rsa_key.pub  $SNAP_USER_COMMON/.ssh/
 else
-    echo "could not find public key"
+    >&2 echo "could not find device_rsa_key.pub"
 fi
 
 cat > $SNAP_USER_COMMON/.ssh/config <<EOF
 Host storage-server
-    User ubuntu
-    HostName ubuntu
-    IdentityFile /root/snap/ros2-exporter-agent/common/.ssh/device_private_key
+    User root
+    HostName 10.166.108.243
+    IdentityFile /root/snap/ros2-exporter-agent/common/.ssh/device_rsa_key
     UserKnownHostsFile /root/snap/ros2-exporter-agent/common/.ssh/known_hosts
 EOF
 
 echo "SSH config file and keys setup completed."
 
-rsync -avz -e "ssh -F $SNAP_USER_COMMON/.ssh/config" --min-size=1 $SNAP_COMMON/ storage-server:$STORAGE_PATH
+rsync -avz -e "ssh -F $SNAP_USER_COMMON/.ssh/config -p 2222" --min-size=1 $SNAP_COMMON/ storage-server:/var/lib/caddy-fileserver/$STORAGE_PATH
