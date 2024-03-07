@@ -12,11 +12,20 @@ else
     >&2 echo "DEVICE_ID is not set. Make sure it's available in the rob-cos-data-sharing snap."
 fi
 
-if [ ! -f $SNAP_DATA/device_rsa_key.pub ]; then
-     >&2 echo "could not find device_rsa_key.pub. Make sure it's available in the rob-cos-data-sharing snap."
+# We copy the private key so that we can modify the permissions. 
+# The content-sharing interfce sets the permissions to 644 
+# which are too loose for the key to be used safely. We cannot 
+# modify the permission before because the content sharing snap
+# imposes it's own permission and this snap has read-only access.
+# The alternative would be to give this snap write access. 
+
+if [ -f $SNAP_DATA/device_rsa_key ]; then
+    cp $SNAP_DATA/device_rsa_key  $SNAP_USER_COMMON/
+    chmod 600 $SNAP_USER_COMMON/device_rsa_key
 else
-   chmod 600 $SNAP_DATA/device_rsa_key
+    >&2 echo "could not find device_rsa_key.pub. Make sure it's available in the rob-cos-data-sharing snap."
 fi
+
 
 cat > $SNAP_USER_COMMON/config <<EOF
 Host storage-server
@@ -24,9 +33,9 @@ Host storage-server
     HostName $REMOTE_SERVER_IP
     StrictHostKeyChecking no
     UserKnownHostsFile=/dev/null
-    IdentityFile $SNAP_DATA/device_rsa_key
+    IdentityFile $SNAP_USER_COMMON/device_rsa_key
 EOF
 
 echo "SSH config file and keys setup completed."
 
-rsync -avz -e "ssh -F $SNAP_USER_COMMON/config -p 2222" --min-size=1 $SNAP_COMMON/data/ storage-server:$STORAGE_PATH
+rsync -avz -e "ssh -F $SNAP_USER_COMMON/config -p $REMOTE_SERVER_PORT" --min-size=1 $SNAP_COMMON/data/ storage-server:$STORAGE_PATH

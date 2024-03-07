@@ -5,8 +5,8 @@ snapctl set topic-regex!
 snapctl set topic-exclude!
 
 # default parameters
-
 snapctl set remote-server-ip="0.0.0.0"
+snapctl set remote-server-port=2222
 snapctl set storage-base-path="/var/lib/caddy-fileserver/"
 snapctl set max-bag-duration=300 # 5 mins
 snapctl set max-bag-size=250000000 # 250 MB
