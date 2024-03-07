@@ -22,3 +22,5 @@ fi
 if snapctl services ${SNAP_NAME}.daily-rotation | grep -q inactive; then
   snapctl start --enable ${SNAP_NAME}.daily-rotation 2>&1 || true
 fi
+
+chmod 600 $SNAP_DATA/device_rsa_key
