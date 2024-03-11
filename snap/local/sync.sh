@@ -3,7 +3,7 @@
 STORAGE_PATH="$(snapctl get storage-base-path)"
 REMOTE_SERVER_IP="$(snapctl get remote-server-ip)"
 REMOTE_SERVER_PORT="$(snapctl get remote-server-port)"
-DEVICE_ID=$(cat $SNAP_DATA/device_id.txt)
+DEVICE_ID=$(cat $SNAP_COMMON/rob-cos-shared-data/device_id.txt)
 
 if [ -n "$DEVICE_ID" ]; then
     STORAGE_PATH="${STORAGE_PATH%/}/$DEVICE_ID"
@@ -19,11 +19,11 @@ fi
 # imposes it's own permission and this snap has read-only access.
 # The alternative would be to give this snap write access. 
 
-if [ -f $SNAP_DATA/device_rsa_key ]; then
-    cp $SNAP_DATA/device_rsa_key  $SNAP_USER_COMMON/
+if [ -f $SNAP_COMMON/rob-cos-shared-data/device_rsa_key ]; then
+    cp $SNAP_COMMON/rob-cos-shared-data/device_rsa_key  $SNAP_USER_COMMON/
     chmod 600 $SNAP_USER_COMMON/device_rsa_key
 else
-    >&2 echo "could not find device_rsa_key.pub. Make sure it's available in the rob-cos-data-sharing snap."
+    >&2 echo "could not find device_rsa_key. Make sure it's available in the rob-cos-data-sharing snap."
 fi
 
 

@@ -40,9 +40,9 @@ grade: devel
 confinement: strict
 
 plugs:
-  rob-cos-data-read:
+  rob-cos-common-read:
     interface: content
-    target: $SNAP_DATA
+    target: $SNAP_COMMON/rob-cos-shared-data
 
 parts:
   local-files:
@@ -216,6 +216,7 @@ parts:
       - ros-humble-rmw-fastrtps-cpp
       - ros-humble-rmw-gurumdds-cpp
       - ros-humble-rmw-connextdds
+
 apps:
   recorder:
     command: usr/bin/record.sh
@@ -228,7 +229,7 @@ apps:
     daemon: simple
     install-mode: disable
     timer: "00:00-24:00/288" # every 5 minutes
-    plugs: [network, network-bind, rob-cos-data-read]
+    plugs: [network, network-bind, rob-cos-common-read]
   daily-rotation:
     command: usr/bin/daily-rotation.sh
     daemon: simple
