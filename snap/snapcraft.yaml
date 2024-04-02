@@ -43,6 +43,9 @@ plugs:
   rob-cos-common-read:
     interface: content
     target: $SNAP_COMMON/rob-cos-shared-data
+  configuration-read:
+    interface: content
+    target: $SNAP_COMMON/configuration
 
 parts:
   local-files:
@@ -50,6 +53,8 @@ parts:
     source: snap/local/
     organize:
       '*.sh': usr/bin/
+    stage-snaps:
+      - yq
     stage-packages:
       - fd-find
       - iputils-ping
