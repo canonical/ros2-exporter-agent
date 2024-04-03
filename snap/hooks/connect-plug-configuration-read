@@ -8,3 +8,4 @@ if [ ! -f "$CONFIGURATION_FILE_PATH" ]; then
 fi
 
 snapctl start --enable ${SNAP_NAME}.read-configuration 2>&1
+snapctl restart ${SNAP_NAME} 2>&1 || true
