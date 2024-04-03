@@ -1,4 +1,4 @@
-snapctl stop --enable ${SNAP_NAME}.read-configuration-snap 2>&1
+snapctl stop --disable ${SNAP_NAME}.read-configuration 2>&1
 
 snapctl stop --disable ${SNAP_NAME}.auto-clean 2>&1 || true
 
@@ -7,3 +7,5 @@ snapctl stop --disable ${SNAP_NAME}.recorder 2>&1 || true
 snapctl stop --disable ${SNAP_NAME}.synchronization 2>&1 || true
 
 snapctl stop --disable ${SNAP_NAME}.daily-rotation 2>&1 || true
+
+snapctl restart ${SNAP_NAME} 2>&1 || true

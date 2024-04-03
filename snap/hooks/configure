@@ -11,3 +11,5 @@ for NUMBER_OPTION in ${NUMBER_OPTIONS}; do
 	  exit 1
   fi
 done
+
+snapctl restart ${SNAP_NAME}.${SNAP_NAME} 2>&1 || true

@@ -223,8 +223,8 @@ parts:
       - ros-humble-rmw-connextdds
 
 apps:
-  read-configuration-snap:
-    command: usr/bin/read-configuration-snap.sh
+  read-configuration:
+    command: usr/bin/read-configuration.sh
     daemon: oneshot
     install-mode: disable
     before: [recorder]
