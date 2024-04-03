@@ -62,7 +62,7 @@ parts:
       - ros-humble-rosbag2
       - ros-humble-rosbag2-storage-mcap
       - rsync
-      
+
       # ROS 2 plugin need to source messages to plot them
       # No custom message is going to be support for now
       - ros-humble-ackermann-msgs
@@ -223,6 +223,11 @@ parts:
       - ros-humble-rmw-connextdds
 
 apps:
+  read-configuration-snap:
+    command: usr/bin/read-configuration-snap.sh
+    daemon: oneshot
+    install-mode: disable
+    before: [recorder]
   recorder:
     command: usr/bin/record.sh
     daemon: simple
