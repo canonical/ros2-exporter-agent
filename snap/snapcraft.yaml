@@ -43,6 +43,9 @@ plugs:
   rob-cos-common-read:
     interface: content
     target: $SNAP_COMMON/rob-cos-shared-data
+  configuration-read:
+    interface: content
+    target: $SNAP_COMMON/configuration
 
 parts:
   local-files:
@@ -50,6 +53,8 @@ parts:
     source: snap/local/
     organize:
       '*.sh': usr/bin/
+    stage-snaps:
+      - yq
     stage-packages:
       - fd-find
       - iputils-ping
@@ -57,7 +62,7 @@ parts:
       - ros-humble-rosbag2
       - ros-humble-rosbag2-storage-mcap
       - rsync
-      
+
       # ROS 2 plugin need to source messages to plot them
       # No custom message is going to be support for now
       - ros-humble-ackermann-msgs
@@ -218,6 +223,11 @@ parts:
       - ros-humble-rmw-connextdds
 
 apps:
+  read-configuration:
+    command: usr/bin/read-configuration.sh
+    daemon: oneshot
+    install-mode: disable
+    before: [recorder]
   recorder:
     command: usr/bin/record.sh
     daemon: simple
