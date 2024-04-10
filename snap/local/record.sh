@@ -6,7 +6,7 @@ ARGUMENTS=""
 function append_argument {
     VALUE="$(snapctl get $2)"
     if [[ -n "${VALUE}" ]]; then
-        ARGUMENTS+="$1 $VALUE "
+        ARGUMENTS+="$1=$VALUE "
     fi
 }
 
