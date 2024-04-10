@@ -3,7 +3,7 @@
 STORAGE_PATH="$(snapctl get storage-base-path)"
 REMOTE_SERVER_IP="$(snapctl get remote-server-ip)"
 REMOTE_SERVER_PORT="$(snapctl get remote-server-port)"
-DEVICE_ID=$(cat $SNAP_COMMON/rob-cos-shared-data/device_id.txt)
+DEVICE_ID="$(snapctl get device-uid)"
 
 if [ -n "$DEVICE_ID" ]; then
     STORAGE_PATH="${STORAGE_PATH%/}/$DEVICE_ID"

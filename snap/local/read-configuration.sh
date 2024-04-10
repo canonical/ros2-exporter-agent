@@ -9,6 +9,7 @@ if [ ! -f "$CONFIGURATION_FILE_PATH" ]; then
     exit 1
 fi
 
+snapctl set device-uid="$(yq '.uid' $CONFIGURATION_FILE_PATH)"
 snapctl set topic-regex="$(yq '.topic-regex' $CONFIGURATION_FILE_PATH)"
 snapctl set topic-exclude="$(yq '.topic-exclude' $CONFIGURATION_FILE_PATH)"
 snapctl set remote-server-ip="$(yq '.remote-server-ip' $CONFIGURATION_FILE_PATH)"
