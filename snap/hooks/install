@@ -1,6 +1,7 @@
 #!/bin/sh -e
 
 # parameters to be set by the user
+snapctl set device-uid!
 snapctl set topic-regex!
 snapctl set topic-exclude!
 
