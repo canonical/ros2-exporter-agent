@@ -38,4 +38,4 @@ EOF
 
 echo "SSH config file and keys setup completed."
 
-rsync -avz -e "ssh -F $SNAP_USER_COMMON/config -p $REMOTE_SERVER_PORT" --min-size=1 $SNAP_COMMON/data/ storage-server:$STORAGE_PATH
+rsync -avz -e "ssh -F $SNAP_USER_COMMON/config -p $REMOTE_SERVER_PORT" --min-size=1 $SNAP_COMMON/data/ storage-server:$STORAGE_PATH 2>&1 || true
