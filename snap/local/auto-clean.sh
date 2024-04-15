@@ -2,8 +2,8 @@
 
 echo "Starting auto-clean."
 
-# get the list of files older than 15 minutes
-LIST_OF_FILES=$(fdfind --type file --change-older-than 15min . $SNAP_COMMON/data) # TODO make the time configurable
+# get the list of files older than 10 minutes
+LIST_OF_FILES=$(fdfind --type file --change-older-than 10min . $SNAP_COMMON/data) # TODO make the time configurable
 
 # remove old files
 rm -f $LIST_OF_FILES

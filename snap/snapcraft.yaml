@@ -238,7 +238,7 @@ apps:
     command: usr/bin/sync.sh
     daemon: simple
     install-mode: disable
-    timer: "00:00-24:00/288" # every 5 minutes
+    timer: "00:00-24:00/720" # every 2 minutes
     plugs: [network, network-bind, rob-cos-common-read]
   daily-rotation:
     command: usr/bin/daily-rotation.sh
@@ -249,4 +249,4 @@ apps:
     command: usr/bin/auto-clean.sh
     daemon: simple
     install-mode: disable
-    timer: "00:00-24:00/96" # every 15 minutes
+    timer: "00:00-24:00/288" # every 5 minutes
