@@ -1,6 +1,6 @@
 name: ros2-exporter-agent
 base: core22
-version: '0.1'
+version: git
 summary: ROS 2 data exporter
 description: |
   The ROS 2 data exporter is recording ROS 2 data
