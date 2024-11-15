@@ -6,7 +6,7 @@ on:
 
 jobs:
   main:
-    uses: ubuntu-robotics/ros2-exporter-agent/.github/workflows/snap.yaml@main
+    uses: canonical/ros2-exporter-agent/.github/workflows/snap.yaml@main
     with:
       branch-name: "main"
 
