@@ -1,3 +1,6 @@
 #!/bin/sh -e
 
+>&1 echo "Stopping services."
+logger -t ${SNAP_NAME} "Stopping services."
+
 snapctl stop --disable ${SNAP_NAME} 2>&1 || true

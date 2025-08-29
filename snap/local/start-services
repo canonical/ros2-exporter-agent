@@ -1,7 +1,7 @@
 #!/bin/sh -e
 
 if snapctl services "${SNAP_NAME}" | grep -q inactive; then
-  >&2 echo "Enabling services."
+  >&1 echo "Enabling services."
   logger -t ${SNAP_NAME} "Enabling services."
 
   snapctl start --enable "${SNAP_NAME}" 2>&1 || true
@@ -9,7 +9,7 @@ if snapctl services "${SNAP_NAME}" | grep -q inactive; then
   exit 0
 fi
 
->&2 echo "Starting services."
+>&1 echo "Starting services."
 logger -t ${SNAP_NAME} "Starting services."
 # Service was already enabled, just restart it to make sure the new
 # config values are picked up
