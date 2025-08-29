@@ -1,5 +1,7 @@
 #!/usr/bin/bash -e
 
+. ${SNAP}/usr/bin/read-configuration.sh
+
 ARGUMENTS=""
 
 # $1 -> flag, $2 -> snap configuration name
