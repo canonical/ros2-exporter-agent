@@ -14,9 +14,6 @@ if [ ! -f "${CONFIGURATION_FILE_PATH}" ]; then
   exit 1
 fi
 
-# If the buck is set, use that. Otherwise, use the device uid
-# DUID="$(snapctl get device-uid)" snapctl set bucket="$(yq '(.bucket // "${DUID}") | envsubst' ${CONFIGURATION_FILE_PATH})"
-
 snapctl set access-key-id="$(yq '.access-key-id' ${CONFIGURATION_FILE_PATH})"
 snapctl set bucket="$(yq '.bucket' ${CONFIGURATION_FILE_PATH})"
 snapctl set device-uid="$(yq '.uid' ${CONFIGURATION_FILE_PATH})"
