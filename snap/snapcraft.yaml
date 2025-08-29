@@ -6,27 +6,11 @@ description: |
   The ROS 2 data exporter records ROS 2 data as rosbags
   and exports them to an S3 server for later use.
 
-  Add your config file for the storage server in:
-
-  /root/snap/ros2-exporter-agent/current/.config/rclone/rclone.conf
-
-  The `config` file should look like:
-
-  ```
-  Host storage-server
-    User <server_user>
-    HostName <server_hostname>
-    IdentityFile /root/snap/ros2-exporter-agent/common/.ssh/<my_private_key>
-    UserKnownHostsFile /root/snap/ros2-exporter-agent/common/.ssh/known_hosts
-  ```
-
-  The daemon daily-rotation will move the bags to a new timestamped directory at midnight.
+  The daemon daily-rotation will move the bags to
+  a new timestamped directory at midnight.
   Make sure to have properly configured the time on the machine.
 
   Optional parameters:
-
-   # server parameter
-   storage-path (default to ~/$HOSTNAME)
 
    # topic recorded (default to all)
    topic-regex
