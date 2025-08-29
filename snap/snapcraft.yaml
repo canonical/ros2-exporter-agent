@@ -40,9 +40,6 @@ grade: devel
 confinement: strict
 
 plugs:
-  rob-cos-common-read:
-    interface: content
-    target: $SNAP_COMMON/rob-cos-shared-data
   configuration-read:
     interface: content
     target: $SNAP_COMMON/configuration
