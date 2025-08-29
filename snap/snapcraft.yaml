@@ -67,10 +67,6 @@ apps:
     daemon: simple
     install-mode: disable
     timer: "00:00" # every day at midnight
-  auto-clean:
-    command: usr/bin/auto-clean.sh
-    daemon: simple
-    install-mode: disable
     timer: "00:00-24:00/288" # every 5 minutes
 
 parts:
