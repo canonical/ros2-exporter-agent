@@ -1,5 +1,9 @@
 #!/bin/sh -e
 
+# parameters to be set by the user
+snapctl set topic-regex!
+snapctl set topic-exclude!
+
 # default parameters
 snapctl set max-bag-duration=300 # 5 mins
 snapctl set max-bag-size=250000000 # 250 MB
