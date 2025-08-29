@@ -21,9 +21,11 @@ fi
 if [ $(ls "${SNAP_COMMON}/data/" | wc -l) -ge 2 ]; then
   MOST_RECENT_FOLDER=$(ls -t "${SNAP_COMMON}/data/" | head -n 1)
 
-  rclone move "${SNAP_COMMON}/data/" \
-  "robcos,access_key_id=$(snapctl get access-key-id),secret_access_key=$(snapctl get secret-access-key):$(snapctl get bucket)" \
+  RCLONE_CONFIG_ROBCOS_ACCESS_KEY_ID="$(snapctl get access-key-id)" \
+  RCLONE_CONFIG_ROBCOS_SECRET_ACCESS_KEY="$(snapctl get secret-access-key)" \
+  rclone move "${SNAP_COMMON}/data/" "robcos:$(snapctl get bucket)" \
     --exclude "${MOST_RECENT_FOLDER}**" --delete-empty-src-dirs \
+    --s3-no-check-bucket \
     --config "${RCLONE_CONF}" 2>&1 || true
 fi
 

@@ -35,4 +35,5 @@ cat > "${SNAP_DATA}/.config/rclone/rclone.conf" <<EOF
 type = s3
 provider = Ceph
 endpoint = $(snapctl get remote-server-ip)
+env_auth = true
 EOF
