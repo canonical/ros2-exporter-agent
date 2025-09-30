@@ -1,0 +1,8 @@
+#!/bin/sh -e
+
+RCLONE_CONF="${SNAP_DATA}/.config/rclone/rclone.conf"
+
+RCLONE_CONFIG_ROBCOS_ACCESS_KEY_ID="$(snapctl get access-key-id)" \
+RCLONE_CONFIG_ROBCOS_SECRET_ACCESS_KEY="$(snapctl get secret-access-key)" \
+rclone lsd --config "${RCLONE_CONF}" "robcos:" \
+| grep -q "$(snapctl get bucket)"
