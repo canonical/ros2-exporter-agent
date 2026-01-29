@@ -36,7 +36,7 @@ description: |
    max-bag-duration # 5 mins
    max-bag-size # 250 MB
 
-grade: devel
+grade: stable
 confinement: strict
 
 plugs:
