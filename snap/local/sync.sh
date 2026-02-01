@@ -1,41 +1,36 @@
-#!/usr/bin/bash -e
+#!/usr/bin/sh -e
 
-STORAGE_PATH="$(snapctl get storage-base-path)"
-REMOTE_SERVER_IP="$(snapctl get remote-server-ip)"
-REMOTE_SERVER_PORT="$(snapctl get remote-server-port)"
-DEVICE_ID="$(snapctl get device-uid)"
+RCLONE_CONF="${SNAP_DATA}/.config/rclone/rclone.conf"
 
-if [ -n "$DEVICE_ID" ]; then
-    STORAGE_PATH="${STORAGE_PATH%/}/$DEVICE_ID"
-    snapctl set storage-path=$STORAGE_PATH
-else
-    >&2 echo "DEVICE_ID is not set. Make sure it's available in the rob-cos-data-sharing snap."
+if [ ! -f "${RCLONE_CONF}" ]; then
+  MSG="The exporter is not fully configured. Cannot sync."
+  echo "${MSG}"
+  logger -t ${SNAP_NAME} "${MSG}"
+  exit 1
 fi
 
-# We copy the private key so that we can modify the permissions. 
-# The content-sharing interfce sets the permissions to 644 
-# which are too loose for the key to be used safely. We cannot 
-# modify the permission before because the content sharing snap
-# imposes it's own permission and this snap has read-only access.
-# The alternative would be to give this snap write access. 
-
-if [ -f $SNAP_COMMON/rob-cos-shared-data/device_rsa_key ]; then
-    cp $SNAP_COMMON/rob-cos-shared-data/device_rsa_key  $SNAP_USER_COMMON/
-    chmod 600 $SNAP_USER_COMMON/device_rsa_key
-else
-    >&2 echo "could not find device_rsa_key. Make sure it's available in the rob-cos-data-sharing snap."
+if ! $(${SNAP}/usr/bin/check-bucket); then
+  MSG="Could not find bucket '$(snapctl get bucket)'."
+  echo "${MSG}"
+  logger -t ${SNAP_NAME} "${MSG}"
+  exit 1
 fi
 
+# If there are 2 rosbag files or more
+# sync them except the most recent one
+if [ $(ls "${SNAP_COMMON}/data/" | wc -l) -ge 2 ]; then
+  MOST_RECENT_FOLDER=$(ls -t "${SNAP_COMMON}/data/" | head -n 1)
 
-cat > $SNAP_USER_COMMON/config <<EOF
-Host storage-server
-    User root
-    HostName $REMOTE_SERVER_IP
-    StrictHostKeyChecking no
-    UserKnownHostsFile=/dev/null
-    IdentityFile $SNAP_USER_COMMON/device_rsa_key
-EOF
+  RCLONE_CONFIG_ROBCOS_ACCESS_KEY_ID="$(snapctl get access-key-id)" \
+  RCLONE_CONFIG_ROBCOS_SECRET_ACCESS_KEY="$(snapctl get secret-access-key)" \
+  rclone move "${SNAP_COMMON}/data/" "robcos:$(snapctl get bucket)" \
+    --exclude "${MOST_RECENT_FOLDER}**" --delete-empty-src-dirs \
+    --s3-no-check-bucket \
+    --config "${RCLONE_CONF}" 2>&1 || true
+fi
 
-echo "SSH config file and keys setup completed."
-
-rsync -avz -e "ssh -F $SNAP_USER_COMMON/config -p $REMOTE_SERVER_PORT" --min-size=1 $SNAP_COMMON/data/ storage-server:$STORAGE_PATH 2>&1 || true
+# @todo See where and how to sync the last file.
+# if [ ! -z "${MOST_RECENT_FOLDER}" ]; then
+#   rclone copyto ${MOST_RECENT_FOLDER} \
+#     --config "${CONFIGURATION_FILE_RCLONE}" 2>&1 || true
+# fi

@@ -1,11 +1,4 @@
 #!/bin/sh -e
 
-CONFIGURATION_FILE_PATH=$SNAP_COMMON/configuration/ros2-data-exporter.yaml
-
-if [ ! -f "$CONFIGURATION_FILE_PATH" ]; then
-    echo "Configuration file '$CONFIGURATION_FILE_PATH' does not exist."
-    exit 1
-fi
-
-snapctl start --enable ${SNAP_NAME}.read-configuration 2>&1
-snapctl restart ${SNAP_NAME} 2>&1 || true
+. ${SNAP}/usr/bin/read-configuration.sh
+. ${SNAP}/usr/bin/start-services
