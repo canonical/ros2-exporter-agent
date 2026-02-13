@@ -2,6 +2,8 @@
 
 echo "Starting auto-clean."
 
+mkdir -p "${SNAP_COMMON}/data"
+
 # get the list of files older than 10 minutes
 LIST_OF_FILES=$(fdfind --type file --change-older-than 10min . $SNAP_COMMON/data) # TODO make the time configurable
 
