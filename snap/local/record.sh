@@ -17,4 +17,4 @@ append_argument "--max-bag-size" "max-bag-size"
 
 mkdir -p "${SNAP_COMMON}/data"
 cd "${SNAP_COMMON}/data"
-${SNAP}/ros2 bag record --storage mcap "${ARGUMENTS}"
+${SNAP}/ros2 bag record --storage mcap ${ARGUMENTS}
