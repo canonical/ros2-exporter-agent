@@ -15,6 +15,6 @@ append_argument "--exclude" "topic-exclude"
 append_argument "--max-bag-duration" "max-bag-duration"
 append_argument "--max-bag-size" "max-bag-size"
 
-
-cd $SNAP_COMMON/data
-$SNAP/ros2 bag record --storage mcap $ARGUMENTS
+mkdir -p "${SNAP_COMMON}/data"
+cd "${SNAP_COMMON}/data"
+${SNAP}/ros2 bag record --storage mcap "${ARGUMENTS}"
