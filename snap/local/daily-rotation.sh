@@ -1,3 +1,3 @@
 #!/usr/bin/bash -e
 
-snapctl restart recorder
+snapctl restart ${SNAP_NAME}.recorder
