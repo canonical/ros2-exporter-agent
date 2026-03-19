@@ -1,5 +1,5 @@
 name: ros2-exporter-agent
-base: core22
+base: core24
 version: git
 summary: ROS 2 data exporter
 description: |
@@ -40,12 +40,35 @@ grade: devel
 confinement: strict
 
 plugs:
-  rob-cos-common-read:
-    interface: content
-    target: $SNAP_COMMON/rob-cos-shared-data
-  configuration-read:
-    interface: content
-    target: $SNAP_COMMON/configuration
+  rosbag2-recorder-parameters:
+    interface: confdb
+    account: canonical-robotics
+    view: cos-rosbag2-recorder/parameters
+    role: custodian
+
+apps:
+  auto-clean:
+    command: usr/bin/auto-clean.sh
+    daemon: simple
+    install-mode: disable
+    timer: "00:00-24:00/288" # every 5 minutes
+  daily-rotation:
+    command: usr/bin/daily-rotation.sh
+    daemon: simple
+    install-mode: disable
+    timer: "00:00" # every day at midnight
+  recorder:
+    command: usr/bin/record.sh
+    daemon: simple
+    install-mode: disable
+    extensions: [ros2-jazzy]
+    plugs: [network, network-bind]
+  synchronization:
+    command: usr/bin/sync.sh
+    daemon: simple
+    install-mode: disable
+    timer: "00:00-24:00/720" # every 2 minutes
+    plugs: [network, network-bind]
 
 parts:
   local-files:
@@ -59,193 +82,243 @@ parts:
       - fd-find
       - iputils-ping
       - openssh-client
-      - ros-humble-rosbag2
-      - ros-humble-rosbag2-storage-mcap
+      - ros-jazzy-ros2run
+      - ros-jazzy-rosbag2-transport
       - rsync
 
       # ROS 2 plugin need to source messages to plot them
       # No custom message is going to be support for now
-      - ros-humble-ackermann-msgs
-      - ros-humble-action-msgs
-      - ros-humble-actionlib-msgs
-      - ros-humble-actuator-msgs
-      - ros-humble-apriltag-msgs
-      - ros-humble-aruco-msgs
-      - ros-humble-aruco-opencv-msgs
-      - ros-humble-automotive-autonomy-msgs
-      - ros-humble-automotive-navigation-msgs
-      - ros-humble-automotive-platform-msgs
-      - ros-humble-autoware-auto-msgs
-      - ros-humble-can-msgs
-      - ros-humble-cartographer-ros-msgs
-      - ros-humble-cascade-lifecycle-msgs
-      - ros-humble-control-msgs
-      - ros-humble-controller-manager-msgs
-      - ros-humble-create-msgs
-      - ros-humble-dataspeed-ulc-msgs
-      - ros-humble-dbw-fca-msgs
-      - ros-humble-dbw-ford-msgs
-      - ros-humble-dbw-polaris-msgs
-      - ros-humble-delphi-esr-msgs
-      - ros-humble-delphi-mrr-msgs
-      - ros-humble-delphi-srr-msgs
-      - ros-humble-depthai-ros-msgs
-      - ros-humble-derived-object-msgs
-      - ros-humble-diagnostic-msgs
-      - ros-humble-dwb-msgs
-      - ros-humble-dynamixel-workbench-msgs
-      - ros-humble-foros-msgs
-      - ros-humble-four-wheel-steering-msgs
-      - ros-humble-foxglove-msgs
-      - ros-humble-gazebo-msgs
-      - ros-humble-geographic-msgs
-      - ros-humble-geometry-msgs
-      - ros-humble-gps-msgs
-      - ros-humble-graph-msgs
-      - ros-humble-grasping-msgs
-      - ros-humble-grbl-msgs
-      - ros-humble-grid-map-msgs
-      - ros-humble-ibeo-msgs
-      - ros-humble-irobot-create-msgs
-      - ros-humble-kartech-linear-actuator-msgs
-      - ros-humble-leo-msgs
-      - ros-humble-lgsvl-msgs
-      - ros-humble-lifecycle-msgs
-      - ros-humble-map-msgs
-      - ros-humble-marker-msgs
-      - ros-humble-marti-can-msgs
-      - ros-humble-marti-common-msgs
-      - ros-humble-marti-dbw-msgs
-      - ros-humble-marti-introspection-msgs
-      - ros-humble-marti-nav-msgs
-      - ros-humble-marti-perception-msgs
-      - ros-humble-marti-sensor-msgs
-      - ros-humble-marti-status-msgs
-      - ros-humble-marti-visualization-msgs
-      - ros-humble-marvelmind-ros2-msgs
-      - ros-humble-mavros-msgs
-      - ros-humble-micro-ros-diagnostic-msgs
-      - ros-humble-micro-ros-msgs
-      - ros-humble-microstrain-inertial-msgs
-      - ros-humble-mobileye-560-660-msgs
-      - ros-humble-moveit-msgs
-      - ros-humble-mrpt-msgs
-      - ros-humble-nao-command-msgs
-      - ros-humble-nao-sensor-msgs
-      - ros-humble-nav-2d-msgs
-      - ros-humble-nav-msgs
-      - ros-humble-nav2-msgs
-      - ros-humble-neobotix-usboard-msgs
-      - ros-humble-nmea-msgs
-      - ros-humble-novatel-gps-msgs
-      - ros-humble-novatel-oem7-msgs
-      - ros-humble-object-recognition-msgs
-      - ros-humble-octomap-msgs
-      - ros-humble-ouster-msgs
-      - ros-humble-pal-statistics-msgs
-      - ros-humble-pcl-msgs
-      - ros-humble-pendulum-msgs
-      - ros-humble-phidgets-msgs
-      - ros-humble-plansys2-msgs
-      - ros-humble-play-motion2-msgs
-      - ros-humble-polygon-msgs
-      - ros-humble-radar-msgs
-      - ros-humble-raspimouse-msgs
-      - ros-humble-rc-common-msgs
-      - ros-humble-rc-reason-msgs
-      - ros-humble-rclpy-message-converter-msgs
-      - ros-humble-rcss3d-agent-msgs
-      - ros-humble-realsense2-camera-msgs
-      - ros-humble-rmf-api-msgs
-      - ros-humble-rmf-building-map-msgs
-      - ros-humble-rmf-charger-msgs
-      - ros-humble-rmf-dispenser-msgs
-      - ros-humble-rmf-door-msgs
-      - ros-humble-rmf-fleet-msgs
-      - ros-humble-rmf-ingestor-msgs
-      - ros-humble-rmf-lift-msgs
-      - ros-humble-rmf-obstacle-msgs
-      - ros-humble-rmf-scheduler-msgs
-      - ros-humble-rmf-site-map-msgs
-      - ros-humble-rmf-task-msgs
-      - ros-humble-rmf-traffic-msgs
-      - ros-humble-rmf-visualization-msgs
-      - ros-humble-rmf-workcell-msgs
-      - ros-humble-robot-calibration-msgs
-      - ros-humble-robot-controllers-msgs
-      - ros-humble-rosapi-msgs
-      - ros-humble-rosbridge-msgs
-      - ros-humble-rosbridge-test-msgs
-      - ros-humble-rosgraph-msgs
-      - ros-humble-rtabmap-msgs
-      - ros-humble-rtcm-msgs
-      - ros-humble-rviz-2d-overlay-msgs
-      - ros-humble-sensor-msgs
-      - ros-humble-sensor-msgs-py
-      - ros-humble-shape-msgs
-      - ros-humble-soccer-object-msgs
-      - ros-humble-soccer-vision-2d-msgs
-      - ros-humble-soccer-vision-3d-msgs
-      - ros-humble-soccer-vision-attribute-msgs
-      - ros-humble-statistics-msgs
-      - ros-humble-std-msgs
-      - ros-humble-stereo-msgs
-      - ros-humble-stubborn-buddies-msgs
-      - ros-humble-system-modes-msgs
-      - ros-humble-teleop-tools-msgs
-      - ros-humble-test-msgs
-      - ros-humble-tf2-geometry-msgs
-      - ros-humble-tf2-msgs
-      - ros-humble-tf2-sensor-msgs
-      - ros-humble-trajectory-msgs
-      - ros-humble-turtlebot3-msgs
-      - ros-humble-turtlebot4-msgs
-      - ros-humble-tuw-geometry-msgs
-      - ros-humble-ublox-msgs
-      - ros-humble-ublox-ubx-msgs
-      - ros-humble-udp-msgs
-      - ros-humble-unique-identifier-msgs
-      - ros-humble-ur-dashboard-msgs
-      - ros-humble-ur-msgs
-      - ros-humble-urg-node-msgs
-      - ros-humble-velodyne-msgs
-      - ros-humble-vision-msgs
-      - ros-humble-visualization-msgs
-      - ros-humble-webots-ros2-msgs
-      - ros-humble-wiimote-msgs
-      - ros-humble-wireless-msgs
+      - ros-jazzy-ackermann-msgs
+      - ros-jazzy-ackermann-nlmpc-msgs
+      - ros-jazzy-action-msgs
+      - ros-jazzy-actionlib-msgs
+      - ros-jazzy-actuator-msgs
+      - ros-jazzy-apriltag-msgs
+      - ros-jazzy-aruco-markers-msgs
+      - ros-jazzy-aruco-msgs
+      - ros-jazzy-aruco-opencv-msgs
+      - ros-jazzy-automotive-autonomy-msgs
+      - ros-jazzy-automotive-navigation-msgs
+      - ros-jazzy-automotive-platform-msgs
+      - ros-jazzy-autoware-adapi-v1-msgs
+      - ros-jazzy-autoware-adapi-version-msgs
+      - ros-jazzy-autoware-auto-msgs
+      - ros-jazzy-autoware-common-msgs
+      - ros-jazzy-autoware-control-msgs
+      - ros-jazzy-autoware-internal-debug-msgs
+      - ros-jazzy-autoware-internal-localization-msgs
+      - ros-jazzy-autoware-internal-metric-msgs
+      - ros-jazzy-autoware-internal-msgs
+      - ros-jazzy-autoware-internal-perception-msgs
+      - ros-jazzy-autoware-internal-planning-msgs
+      - ros-jazzy-autoware-localization-msgs
+      - ros-jazzy-autoware-map-msgs
+      - ros-jazzy-autoware-msgs
+      - ros-jazzy-autoware-perception-msgs
+      - ros-jazzy-autoware-planning-msgs
+      - ros-jazzy-autoware-sensing-msgs
+      - ros-jazzy-autoware-system-msgs
+      - ros-jazzy-autoware-v2x-msgs
+      - ros-jazzy-autoware-vehicle-msgs
+      - ros-jazzy-axis-msgs
+      - ros-jazzy-camera-aravis2-msgs
+      - ros-jazzy-can-msgs
+      - ros-jazzy-cartographer-ros-msgs
+      - ros-jazzy-cascade-lifecycle-msgs
+      - ros-jazzy-clearpath-motor-msgs
+      - ros-jazzy-clearpath-msgs
+      - ros-jazzy-clearpath-platform-msgs
+      - ros-jazzy-cob-msgs
+      - ros-jazzy-control-msgs
+      - ros-jazzy-controller-manager-msgs
+      - ros-jazzy-create3-examples-msgs
+      - ros-jazzy-cx-msgs
+      - ros-jazzy-data-tamer-msgs
+      - ros-jazzy-dataspeed-can-msgs
+      - ros-jazzy-delphi-esr-msgs
+      - ros-jazzy-delphi-mrr-msgs
+      - ros-jazzy-delphi-srr-msgs
+      - ros-jazzy-depth-obstacle-detect-ros-msgs
+      - ros-jazzy-depthai-ros-msgs
+      - ros-jazzy-derived-object-msgs
+      - ros-jazzy-diagnostic-msgs
+      - ros-jazzy-ds-dbw-msgs
+      - ros-jazzy-dwb-msgs
+      - ros-jazzy-dynamixel-workbench-msgs
+      - ros-jazzy-etsi-its-cam-msgs
+      - ros-jazzy-etsi-its-cam-ts-msgs
+      - ros-jazzy-etsi-its-cpm-ts-msgs
+      - ros-jazzy-etsi-its-denm-msgs
+      - ros-jazzy-etsi-its-denm-ts-msgs
+      - ros-jazzy-etsi-its-mapem-ts-msgs
+      - ros-jazzy-etsi-its-mcm-uulm-msgs
+      - ros-jazzy-etsi-its-msgs
+      - ros-jazzy-etsi-its-spatem-ts-msgs
+      - ros-jazzy-etsi-its-vam-ts-msgs
+      - ros-jazzy-event-camera-msgs
+      - ros-jazzy-fadecandy-msgs
+      - ros-jazzy-ffmpeg-image-transport-msgs
+      - ros-jazzy-flexbe-msgs
+      - ros-jazzy-flir-camera-msgs
+      - ros-jazzy-four-wheel-steering-msgs
+      - ros-jazzy-foxglove-msgs
+      - ros-jazzy-fuse-msgs
+      - ros-jazzy-gazebo-msgs
+      - ros-jazzy-geographic-msgs
+      - ros-jazzy-geometry-msgs
+      - ros-jazzy-gps-msgs
+      - ros-jazzy-graph-msgs
+      - ros-jazzy-grasping-msgs
+      - ros-jazzy-grbl-msgs
+      - ros-jazzy-grid-map-msgs
+      - ros-jazzy-husarion-ugv-msgs
+      - ros-jazzy-ibeo-msgs
+      - ros-jazzy-irobot-create-msgs
+      - ros-jazzy-kartech-linear-actuator-msgs
+      - ros-jazzy-leo-msgs
+      - ros-jazzy-lgsvl-msgs
+      - ros-jazzy-lifecycle-msgs
+      - ros-jazzy-map-msgs
+      - ros-jazzy-marine-acoustic-msgs
+      - ros-jazzy-marine-sensor-msgs
+      - ros-jazzy-marker-msgs
+      - ros-jazzy-marti-can-msgs
+      - ros-jazzy-marti-common-msgs
+      - ros-jazzy-marti-dbw-msgs
+      - ros-jazzy-marti-introspection-msgs
+      - ros-jazzy-marti-nav-msgs
+      - ros-jazzy-marti-perception-msgs
+      - ros-jazzy-marti-sensor-msgs
+      - ros-jazzy-marti-status-msgs
+      - ros-jazzy-marti-visualization-msgs
+      - ros-jazzy-mavros-msgs
+      - ros-jazzy-micro-ros-diagnostic-msgs
+      - ros-jazzy-micro-ros-msgs
+      - ros-jazzy-microstrain-inertial-msgs
+      - ros-jazzy-mobileye-560-660-msgs
+      - ros-jazzy-mocap4r2-msgs
+      - ros-jazzy-mola-msgs
+      - ros-jazzy-moveit-msgs
+      - ros-jazzy-moveit-task-constructor-msgs
+      - ros-jazzy-mrpt-msgs
+      - ros-jazzy-nao-command-msgs
+      - ros-jazzy-nao-lola-command-msgs
+      - ros-jazzy-nao-lola-sensor-msgs
+      - ros-jazzy-nao-sensor-msgs
+      - ros-jazzy-nav-2d-msgs
+      - ros-jazzy-nav-msgs
+      - ros-jazzy-nav2-msgs
+      - ros-jazzy-neobotix-usboard-msgs
+      - ros-jazzy-nmea-msgs
+      - ros-jazzy-novatel-gps-msgs
+      - ros-jazzy-novatel-oem7-msgs
+      - ros-jazzy-object-recognition-msgs
+      - ros-jazzy-octomap-msgs
+      - ros-jazzy-off-highway-general-purpose-radar-msgs
+      - ros-jazzy-off-highway-premium-radar-msgs
+      - ros-jazzy-off-highway-premium-radar-sample-msgs
+      - ros-jazzy-off-highway-radar-msgs
+      - ros-jazzy-off-highway-uss-msgs
+      - ros-jazzy-open-sound-control-msgs
+      - ros-jazzy-orbbec-camera-msgs
+      - ros-jazzy-ouster-sensor-msgs
+      - ros-jazzy-pal-statistics-msgs
+      - ros-jazzy-pcl-msgs
+      - ros-jazzy-pendulum-msgs
+      - ros-jazzy-phidgets-msgs
+      - ros-jazzy-plansys2-msgs
+      - ros-jazzy-play-motion-builder-msgs
+      - ros-jazzy-play-motion2-msgs
+      - ros-jazzy-plotjuggler-msgs
+      - ros-jazzy-polygon-msgs
+      - ros-jazzy-ptz-action-server-msgs
+      - ros-jazzy-radar-msgs
+      - ros-jazzy-raspimouse-msgs
+      - ros-jazzy-rc-common-msgs
+      - ros-jazzy-rc-reason-msgs
+      - ros-jazzy-rclpy-message-converter-msgs
+      - ros-jazzy-rcss3d-agent-msgs
+      - ros-jazzy-realsense2-camera-msgs
+      - ros-jazzy-rmf-api-msgs
+      - ros-jazzy-rmf-building-map-msgs
+      - ros-jazzy-rmf-charger-msgs
+      - ros-jazzy-rmf-dispenser-msgs
+      - ros-jazzy-rmf-door-msgs
+      - ros-jazzy-rmf-fleet-msgs
+      - ros-jazzy-rmf-ingestor-msgs
+      - ros-jazzy-rmf-lift-msgs
+      - ros-jazzy-rmf-obstacle-msgs
+      - ros-jazzy-rmf-scheduler-msgs
+      - ros-jazzy-rmf-site-map-msgs
+      - ros-jazzy-rmf-task-msgs
+      - ros-jazzy-rmf-traffic-msgs
+      - ros-jazzy-rmf-visualization-msgs
+      - ros-jazzy-rmf-workcell-msgs
+      - ros-jazzy-robot-calibration-msgs
+      - ros-jazzy-ros-babel-fish-test-msgs
+      - ros-jazzy-ros2-socketcan-msgs
+      - ros-jazzy-rosapi-msgs
+      - ros-jazzy-rosbag2-performance-benchmarking-msgs
+      - ros-jazzy-rosbridge-msgs
+      - ros-jazzy-rosbridge-test-msgs
+      - ros-jazzy-rosgraph-monitor-msgs
+      - ros-jazzy-rosgraph-msgs
+      - ros-jazzy-rtabmap-msgs
+      - ros-jazzy-rtcm-msgs
+      - ros-jazzy-rviz-2d-overlay-msgs
+      - ros-jazzy-sensor-msgs
+      - ros-jazzy-service-msgs
+      - ros-jazzy-shape-msgs
+      - ros-jazzy-slg-msgs
+      - ros-jazzy-smacc2-msgs
+      - ros-jazzy-smach-msgs
+      - ros-jazzy-soccer-geometry-msgs
+      - ros-jazzy-soccer-model-msgs
+      - ros-jazzy-soccer-vision-2d-msgs
+      - ros-jazzy-soccer-vision-3d-msgs
+      - ros-jazzy-soccer-vision-attribute-msgs
+      - ros-jazzy-statistics-msgs
+      - ros-jazzy-std-msgs
+      - ros-jazzy-stereo-msgs
+      - ros-jazzy-system-modes-msgs
+      - ros-jazzy-teleop-tools-msgs
+      - ros-jazzy-test-msgs
+      - ros-jazzy-tf2-geometry-msgs
+      - ros-jazzy-tf2-msgs
+      - ros-jazzy-tf2-sensor-msgs
+      - ros-jazzy-trajectory-msgs
+      - ros-jazzy-turtlebot3-applications-msgs
+      - ros-jazzy-turtlebot3-msgs
+      - ros-jazzy-turtlebot4-msgs
+      - ros-jazzy-tuw-airskin-msgs
+      - ros-jazzy-tuw-geo-msgs
+      - ros-jazzy-tuw-geometry-msgs
+      - ros-jazzy-tuw-graph-msgs
+      - ros-jazzy-tuw-msgs
+      - ros-jazzy-tuw-multi-robot-msgs
+      - ros-jazzy-tuw-nav-msgs
+      - ros-jazzy-tuw-object-map-msgs
+      - ros-jazzy-tuw-object-msgs
+      - ros-jazzy-tuw-std-msgs
+      - ros-jazzy-twist-mux-msgs
+      - ros-jazzy-ublox-msgs
+      - ros-jazzy-ublox-ubx-msgs
+      - ros-jazzy-udp-msgs
+      - ros-jazzy-unique-identifier-msgs
+      - ros-jazzy-ur-dashboard-msgs
+      - ros-jazzy-ur-msgs
+      - ros-jazzy-urg-node-msgs
+      - ros-jazzy-velodyne-msgs
+      - ros-jazzy-vision-msgs
+      - ros-jazzy-visualization-msgs
+      - ros-jazzy-webots-ros2-msgs
+      - ros-jazzy-wiimote-msgs
+      - ros-jazzy-wireless-msgs
+      - ros-jazzy-yasmin-msgs
+      - ros-jazzy-zed-msgs
 
       # Additional DDS vendors
-      - ros-humble-rmw-cyclonedds-cpp
-      - ros-humble-rmw-fastrtps-cpp
-      - ros-humble-rmw-gurumdds-cpp
-      - ros-humble-rmw-connextdds
-
-apps:
-  read-configuration:
-    command: usr/bin/read-configuration.sh
-    daemon: oneshot
-    install-mode: disable
-    before: [recorder]
-  recorder:
-    command: usr/bin/record.sh
-    daemon: simple
-    install-mode: disable
-    extensions: [ros2-humble]
-    plugs: [network, network-bind]
-  synchronization:
-    command: usr/bin/sync.sh
-    daemon: simple
-    install-mode: disable
-    timer: "00:00-24:00/720" # every 2 minutes
-    plugs: [network, network-bind, rob-cos-common-read]
-  daily-rotation:
-    command: usr/bin/daily-rotation.sh
-    daemon: simple
-    install-mode: disable
-    timer: "00:00" # every day at midnight
-  auto-clean:
-    command: usr/bin/auto-clean.sh
-    daemon: simple
-    install-mode: disable
-    timer: "00:00-24:00/288" # every 5 minutes
+      - ros-jazzy-rmw-cyclonedds-cpp
+      - ros-jazzy-rmw-fastrtps-cpp
+      - ros-jazzy-rmw-gurumdds-cpp
+      - ros-jazzy-rmw-connextdds

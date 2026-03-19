@@ -1,0 +1,31 @@
+#!/usr/bin/env python3
+
+import json
+import subprocess
+import os
+import sys
+import yaml
+
+# Get entire view in one call
+result = subprocess.run(
+    ["snapctl", "get", "--view", ":rosbag2-recorder-parameters", "-d"],
+    capture_output=True,
+    text=True,
+)
+
+if result.returncode != 0:
+    print(f"No confdb data found: {result.stderr}")
+    sys.exit(1)
+
+# Build updates
+view_data = json.loads(result.stdout)
+
+config_file = os.path.join(
+    os.environ["SNAP_COMMON"], "configuration", "rosbag2-recorder.yaml"
+)
+
+data = yaml.safe_load(view_data.get("file", "{}"))
+
+# Write
+with open(config_file, "w") as f:
+    yaml.dump(data, f, default_flow_style=False)

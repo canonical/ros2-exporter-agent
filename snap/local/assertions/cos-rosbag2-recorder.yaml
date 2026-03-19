@@ -1,0 +1,25 @@
+type: confdb-schema
+authority-id: canonical-robotics
+account-id: canonical-robotics
+name: cos-rosbag2-recorder
+summary: A YAML-based configuration for ROS 2 bag recorder settings
+timestamp: "2026-03-18T13:25:21Z"
+revision: "1"
+views:
+  parameters:
+    rules:
+      -
+        request: file
+        storage: rosbag2-recorder-parameters
+
+body: |-
+  {
+    "storage": {
+      "schema": {
+        "rosbag2-recorder-parameters": {
+          "type": "string",
+          "ephemeral": true
+        }
+      }
+    }
+  }

@@ -1,20 +1,12 @@
 #!/usr/bin/bash -e
 
-ARGUMENTS=""
-
-# $1 -> flag, $2 -> snap configuration name
-function append_argument {
-    VALUE="$(snapctl get $2)"
-    if [[ -n "${VALUE}" ]]; then
-        ARGUMENTS+="$1=$VALUE "
-    fi
-}
-
-append_argument "--regex" "topic-regex"
-append_argument "--exclude" "topic-exclude"
-append_argument "--max-bag-duration" "max-bag-duration"
-append_argument "--max-bag-size" "max-bag-size"
-
 mkdir -p "${SNAP_COMMON}/data"
-cd "${SNAP_COMMON}/data"
-${SNAP}/ros2 bag record --storage mcap ${ARGUMENTS}
+BAG_URI="${SNAP_COMMON}/data/rosbag2_$(date +%Y_%m_%d-%H_%M_%S)"
+
+ARGUMENTS="--ros-args --remap __node:=cos_rosbag2_recorder -p storage.uri:=\"${BAG_URI}\""
+
+if [ -f "${SNAP_COMMON}/configuration/rosbag2-recorder.yaml" ]; then
+    ARGUMENTS="${ARGUMENTS} --params-file ${SNAP_COMMON}/configuration/rosbag2-recorder.yaml"
+fi
+
+${SNAP}/ros2 run rosbag2_transport recorder ${ARGUMENTS}
