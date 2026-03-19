@@ -24,3 +24,4 @@ jobs:
     with:
       runs-on: '["ubuntu-latest", ["self-hosted", "linux", "ARM64", "large", "noble"]]'
       git-ref: ${{ inputs.branch-name == '' && github.ref || inputs.branch-name }}
+      snap-risk: candidate
