@@ -1,5 +1,9 @@
 #!/usr/bin/bash -e
 
+if snapctl services "${SNAP_NAME}.auto-clean" | grep -q inactive; then
+	snapctl start --enable "${SNAP_NAME}.auto-clean" 2>&1 || true
+fi
+
 if ! snapctl is-connected configuration-read; then
 	logger -t ${SNAP_NAME} "Cannot start recorder yet, missing required interface: configuration-read"
 	exit 0
