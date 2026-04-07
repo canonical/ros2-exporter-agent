@@ -1,8 +1,8 @@
 #!/bin/sh -e
 
 # now we can start the services
-if snapctl services ${SNAP_NAME}.auto-clean | grep -q inactive; then
-  snapctl start --enable ${SNAP_NAME}.auto-clean 2>&1 || true
+if snapctl services "${SNAP_NAME}.auto-clean" | grep -q inactive; then
+  snapctl start --enable "${SNAP_NAME}.auto-clean" 2>&1 || true
 fi
 
-$SNAP/usr/bin/try-enable-recording.sh
+"${SNAP}/usr/bin/try-enable-recording.sh"
