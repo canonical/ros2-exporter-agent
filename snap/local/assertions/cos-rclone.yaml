@@ -1,0 +1,31 @@
+type: confdb-schema
+authority-id: canonical-robotics
+account-id: canonical-robotics
+name: cos-rclone
+summary: A YAML-based configuration for Rclone configuration
+timestamp: "2026-03-18T13:25:21Z"
+revision: "2"
+views:
+  parameters:
+    rules:
+      -
+        request: file
+        storage: rclone-parameters
+      -
+        request: bucket
+        storage: rclone-bucket
+
+body: |-
+  {
+    "storage": {
+      "schema": {
+        "rclone-parameters": {
+          "type": "string",
+          "ephemeral": true
+        },
+        "rclone-bucket": {
+          "type": "string"
+        }
+      }
+    }
+  }

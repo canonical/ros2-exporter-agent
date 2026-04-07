@@ -1,1 +1,3 @@
 *.snap
+**/snap/local/assertions/*.json
+**/snap/local/assertions/*.assert

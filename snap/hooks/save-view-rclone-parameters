@@ -4,11 +4,10 @@ import json
 import subprocess
 import os
 import sys
-import yaml
 
-# Get entire view in one call
+# Get view
 result = subprocess.run(
-    ["snapctl", "get", "--view", ":rosbag2-recorder-parameters", "-d"],
+    ["snapctl", "get", "--view", ":rclone-parameters", "-d"],
     capture_output=True,
     text=True,
 )
@@ -17,15 +16,15 @@ if result.returncode != 0:
     print(f"No confdb data found: {result.stderr}")
     sys.exit(1)
 
-# Build updates
+# Load view output as JSON
 view_data = json.loads(result.stdout)
 
+ini_content = view_data.get("file", "\"\"")
+
 config_file = os.path.join(
-    os.environ["SNAP_COMMON"], ".config", "rosbag2_recorder", "rosbag2_recorder.yaml"
+    os.environ["SNAP_COMMON"], ".config", "rclone", "rclone.conf"
 )
 
-data = yaml.safe_load(view_data.get("file", "{}"))
-
-# Write
+os.makedirs(os.path.dirname(config_file), exist_ok=True)
 with open(config_file, "w") as f:
-    yaml.dump(data, f, default_flow_style=False)
+    f.write(ini_content)

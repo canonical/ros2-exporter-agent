@@ -6,7 +6,7 @@ import sys
 import yaml
 
 config_file = os.path.join(
-    os.environ["SNAP_COMMON"], "configuration", "rosbag2-recorder.yaml"
+    os.environ["SNAP_COMMON"], ".config", "rosbag2_recorder", "rosbag2_recorder.yaml"
 )
 
 if not os.path.exists(config_file):

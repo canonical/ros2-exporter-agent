@@ -1,0 +1,44 @@
+#!/usr/bin/sh -eu
+
+RCLONE_CONF="${SNAP_COMMON}/.config/rclone/rclone.conf"
+
+if [ ! -f "${RCLONE_CONF}" ]; then
+  logger -t ${SNAP_NAME} "The exporter is not fully configured. Cannot sync."
+  exit 1
+fi
+
+# Verify rclone config contains a `[cos]` section
+if ! grep -q '^\[cos\]' "${RCLONE_CONF}"; then
+  logger -t ${SNAP_NAME} "rclone config missing [cos] section; exporter not configured."
+  exit 1
+fi
+
+if ! ${SNAP}/usr/bin/check-bucket; then
+  exit 1
+fi
+
+logger -t ${SNAP_NAME} "Starting sync."
+
+# If there are rosbag files in the data directory, sync them to the cloud bucket
+if [ $(ls "${SNAP_COMMON}/data/" | wc -l) -ge 1 ]; then
+  BUCKET="$(snapctl get --view :rclone-parameters bucket)"
+
+  # Ignore the most recent folder if the recorder service is active,
+  # to avoid syncing a rosbag that is currently being written to.
+  MOST_RECENT_FOLDER=""
+  if snapctl services ros2-exporter-agent.recorder 2>/dev/null | grep -q 'active'; then
+    MOST_RECENT_FOLDER=$(ls -t "${SNAP_COMMON}/data/" | head -n 1)
+    logger -t ${SNAP_NAME} "The recorder is active. Not syncing '${MOST_RECENT_FOLDER}'."
+  fi
+
+  rclone move "${SNAP_COMMON}/data/" "cos:${BUCKET}" \
+    --exclude "${MOST_RECENT_FOLDER}**" --delete-empty-src-dirs \
+    --check-first --s3-no-check-bucket \
+    --config "${RCLONE_CONF}" 2>&1 || true
+fi
+
+# @todo See where and how to sync the last file.
+# if [ ! -z "${MOST_RECENT_FOLDER}" ]; then
+#   rclone move "${MOST_RECENT_FOLDER}" \
+#     --config "${CONFIGURATION_FILE_RCLONE}" 2>&1 || true
+# fi

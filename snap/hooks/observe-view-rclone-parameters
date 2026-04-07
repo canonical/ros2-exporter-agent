@@ -1,0 +1,5 @@
+#!/bin/sh -eu
+
+if snapctl services ${SNAP_NAME}.synchronization | grep -q inactive; then
+  snapctl start --enable ${SNAP_NAME}.synchronization 2>&1 || true
+fi

@@ -1,0 +1,14 @@
+#!/usr/bin/sh -eu
+
+BAG_URI="${SNAP_COMMON}/data/rosbag2_$(date +%Y_%m_%d-%H_%M_%S)"
+CONFIG_FILE="${SNAP_COMMON}/.config/rosbag2_recorder/rosbag2_recorder.yaml"
+
+ARGUMENTS="--ros-args --remap __node:=cos_rosbag2_recorder -p storage.uri:=\"${BAG_URI}\""
+
+if [ -f "${CONFIG_FILE}" ]; then
+    ARGUMENTS="${ARGUMENTS} --params-file ${CONFIG_FILE}"
+fi
+
+logger -t ${SNAP_NAME} "Starting rosbag2 recorder with arguments: ${ARGUMENTS}"
+
+${SNAP}/ros2 run rosbag2_transport recorder ${ARGUMENTS}

@@ -1,0 +1,14 @@
+#!/bin/sh -eu
+
+RCLONE_CONF="${SNAP_COMMON}/.config/rclone/rclone.conf"
+BUCKET="$(snapctl get --view :rclone-parameters bucket)"
+
+if ! output="$(rclone lsd --config "${RCLONE_CONF}" "cos:" 2>&1)"; then
+  logger -t "${SNAP_NAME}" "Failed to list buckets: ${output}"
+  exit 1
+fi
+
+if ! echo "${output}" | grep -q "${BUCKET}"; then
+  logger -t "${SNAP_NAME}" "Bucket '${BUCKET}' not found"
+  exit 1
+fi

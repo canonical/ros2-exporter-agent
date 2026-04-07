@@ -1,3 +1,5 @@
-#!/bin/sh -e
+#!/bin/sh -eu
 
-mkdir -p ${SNAP_COMMON}/{data,configuration}
+mkdir -p ${SNAP_COMMON}/.config/rosbag2_recorder
+mkdir -p ${SNAP_COMMON}/.config/rclone
+mkdir -p ${SNAP_COMMON}/data
