@@ -6,7 +6,7 @@ description: |
   The ROS 2 data exporter is recording ROS 2 data
   and exporting them on a server for later consultation
 
-  Add you private ssh-key for the storage server in:
+  Add your private ssh-key for the storage server in:
 
    /root/snap/ros2-exporter-agent/common/.ssh/
 
@@ -24,7 +24,7 @@ description: |
   remote = fileserver:/var/lib/caddy-fileserver/robot-123
   ```
 
-  The `rosbag2-recorder` shoud look like:
+  The `rosbag2-recorder` should look like:
   ```
   cos_rosbag2_recorder:
     ros__parameters:

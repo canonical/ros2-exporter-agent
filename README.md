@@ -11,7 +11,7 @@ In order for the synchronization to function, a server must be setup.
 
 ### Client setup
 - Generate an ssh key to access the server
-- Place the ssh key in `/root/snap/ros2-exporter-agent/common/.ssh` (the syncronization daemon will be running as root)
+- Place the ssh key in `/root/snap/ros2-exporter-agent/common/.ssh` (the synchronization daemon will be running as root)
 
 The `/root/snap/ros2-exporter-agent/common/` content should look like:
 ```

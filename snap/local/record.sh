@@ -8,6 +8,7 @@ if [[ -z "${ROSBAG2_RECORDER_CONFIG}" ]]; then
 fi
 
 BAG_URI="${SNAP_COMMON}/data/rosbag2_$(date +%Y_%m_%d-%H_%M_%S)"
+mkdir -p "${SNAP_COMMON}/data"
 
 ROSBAG2_RECORDER_CONFIG_FILE="$(mktemp)"
 trap 'rm -f "${ROSBAG2_RECORDER_CONFIG_FILE}"' EXIT
