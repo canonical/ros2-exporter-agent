@@ -27,7 +27,7 @@ else
     >&2 echo "could not find device_rsa_key. Make sure it's available in the rob-cos-data-sharing snap."
 fi
 
-echo "Rclone key setup completed."
+echo "Starting to copy the files with Rclone."
 
 mkdir -p "${SNAP_COMMON}/data"
 rclone copy --config "${RCLONE_CONFIG_FILE}" \
