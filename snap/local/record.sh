@@ -1,20 +1,25 @@
-#!/usr/bin/bash -e
+#!/usr/bin/bash -eu
 
-ARGUMENTS=""
+ROSBAG2_RECORDER_CONFIG="$(snapctl get rosbag2-recorder)"
 
-# $1 -> flag, $2 -> snap configuration name
-function append_argument {
-    VALUE="$(snapctl get $2)"
-    if [[ -n "${VALUE}" ]]; then
-        ARGUMENTS+="$1=$VALUE "
-    fi
-}
+if [[ -z "${ROSBAG2_RECORDER_CONFIG}" ]]; then
+  logger -t "${SNAP_NAME}" "rosbag2-recorder configuration is not set."
+  exit 1
+fi
 
-append_argument "--regex" "topic-regex"
-append_argument "--exclude" "topic-exclude"
-append_argument "--max-bag-duration" "max-bag-duration"
-append_argument "--max-bag-size" "max-bag-size"
+BAG_URI="${SNAP_COMMON}/data/rosbag2_$(date +%Y_%m_%d-%H_%M_%S)"
 
-mkdir -p "${SNAP_COMMON}/data"
-cd "${SNAP_COMMON}/data"
-${SNAP}/ros2 bag record --storage mcap ${ARGUMENTS}
+ROSBAG2_RECORDER_CONFIG_FILE="$(mktemp)"
+trap 'rm -f "${ROSBAG2_RECORDER_CONFIG_FILE}"' EXIT
+printf '%s\n' "${ROSBAG2_RECORDER_CONFIG}" > "${ROSBAG2_RECORDER_CONFIG_FILE}"
+
+ARGUMENTS=(
+  --ros-args
+  --remap __node:=cos_rosbag2_recorder
+  -p "storage.uri:=${BAG_URI}"
+  --params-file "${ROSBAG2_RECORDER_CONFIG_FILE}"
+)
+
+logger -t "${SNAP_NAME}" "Starting rosbag2 recorder with arguments: ${ARGUMENTS[*]}"
+
+"${SNAP}/ros2" run rosbag2_transport recorder "${ARGUMENTS[@]}"

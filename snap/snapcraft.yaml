@@ -6,35 +6,38 @@ description: |
   The ROS 2 data exporter is recording ROS 2 data
   and exporting them on a server for later consultation
 
-  Add you private ssh-key and config file for the storage server in:
+  Add you private ssh-key for the storage server in:
 
    /root/snap/ros2-exporter-agent/common/.ssh/
 
-  The `config` file should look like:
+  The `rclone-conf` should look like:
 
   ```
-  Host storage-server
-      User <server_user>
-      HostName <server_hostname>
-      IdentityFile /root/snap/ros2-exporter-agent/common/.ssh/<my_private_key>
-      UserKnownHostsFile /root/snap/ros2-exporter-agent/common/.ssh/known_hosts
+  [fileserver]
+  type = sftp
+  host = your.fileserver.example.com
+  user = root
+  port = 2222
+  key_file = /root/snap/ros2-exporter-agent/common/.ssh/device_rsa_key
+  [bagstore]
+  type = alias
+  remote = fileserver:/var/lib/caddy-fileserver/robot-123
+  ```
+
+  The `rosbag2-recorder` shoud look like:
+  ```
+  cos_rosbag2_recorder:
+    ros__parameters:
+      record:
+        regex: '.*'
+      storage:
+        storage_id: 'mcap'
+        max_bagfile_duration: 1230
+        max_bagfile_size: 10000000000
   ```
 
   The daemon daily-rotation will move the bags to a new timestamped directory at midnight.
   Make sure to have properly configured the time on the machine.
-
-  Optional parameters:
-
-   # server parameter
-   storage-path (default to ~/$HOSTNAME)
-
-   # topic recorded (default to all)
-   topic-regex
-   topic-exclude
-
-   # bag parameters
-   max-bag-duration # 5 mins
-   max-bag-size # 250 MB
 
 grade: stable
 confinement: strict
@@ -59,10 +62,10 @@ parts:
       - fd-find
       - iputils-ping
       - openssh-client
-      - rsync
       - ros-jazzy-ros2run
       - ros-jazzy-rosbag2
       - ros-jazzy-rosbag2-storage-mcap
+      - rclone
 
       # ROS 2 plugin need to source messages to plot them
       # No custom message is going to be support for now
