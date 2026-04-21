@@ -24,7 +24,7 @@ if [ -f "${SNAP_COMMON}/rob-cos-shared-data/device_rsa_key" ]; then
     cp "${SNAP_COMMON}/rob-cos-shared-data/device_rsa_key" "${SNAP_USER_COMMON}/"
     chmod 600 "${SNAP_USER_COMMON}/device_rsa_key"
 else
-    >&2 echo "could not find device_rsa_key. Make sure it's available in the rob-cos-data-sharing snap."
+    >&2 echo "could not find device_rsa_key. If you need, make sure it's available in the rob-cos-data-sharing snap."
 fi
 
 echo "Starting to copy the files with Rclone."
