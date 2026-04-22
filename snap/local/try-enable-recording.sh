@@ -4,15 +4,11 @@ if snapctl services "${SNAP_NAME}.auto-clean" | grep -q inactive; then
 	snapctl start --enable "${SNAP_NAME}.auto-clean" 2>&1 || true
 fi
 
-if ! snapctl is-connected configuration-read; then
-	logger -t "${SNAP_NAME}" "Cannot start recorder yet, missing required interface: configuration-read"
+if ! snapctl is-connected confdb-configuration; then
+	logger -t "${SNAP_NAME}" "Cannot start recorder yet, missing required interface: confdb-configuration"
 	exit 0
 fi
 
-if ! snapctl is-connected rob-cos-common-read; then
-	logger -t "${SNAP_NAME}" "Cannot start recorder yet, missing required interface: rob-cos-common-read"
-	exit 0
-fi
 
 ## if auto-clean started correctly we can start recording
 if snapctl services "${SNAP_NAME}.auto-clean" | grep -q enabled; then

@@ -1,9 +1,3 @@
 #!/bin/sh -eu
 
-#rclone.conf configuration
-snapctl set rclone-conf!
-
-# rosbag2-recorder configuration
-snapctl set rosbag2-recorder!
-
 mkdir -p "${SNAP_COMMON}/data"

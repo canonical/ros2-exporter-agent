@@ -4,6 +4,7 @@ The ROS 2 data exporter is recording ROS 2 data and exporting them on a server f
 ## Requirement
 
 - snapd >= 2.60.4+git1367.g558a947
+- Confdb experimental feature enabled in snapd: `sudo snap set system experimental.confdbs=true`
 
 ## Synchronization setup
 
@@ -28,6 +29,6 @@ drwx------ 14 root root 4.0K sept. 29 16:32 ..
 - Copy the public key of the client in the `~/.ssh/authorized_keys`
 
 
-## Snap parameters
-- `rclone-conf`, full `rclone` configuration content used by the synchronization daemon. It must define the `bagstore` remote used by `sync.sh`.
-- `rosbag2-recorder`, YAML content passed to `rosbag2_transport recorder` as `--params-file`.
+## Confdb configuration
+- `rclone`, full `rclone` configuration content read from the `ros2-exporter-agent/configuration` confdb view. It must define the `bagstore` remote used by `sync.sh`.
+- `rosbag2-recorder`, YAML content read from the same confdb view and passed to `rosbag2_transport recorder` as `--params-file`.

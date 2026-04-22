@@ -10,7 +10,7 @@ description: |
 
    /root/snap/ros2-exporter-agent/common/.ssh/
 
-  The `rclone-conf` should look like:
+  The `rclone` value in confdb (`ros2-exporter-agent/configuration`) should look like:
 
   ```
   [fileserver]
@@ -24,7 +24,7 @@ description: |
   remote = fileserver:/var/lib/caddy-fileserver/robot-123
   ```
 
-  The `rosbag2-recorder` should look like:
+  The `rosbag2-recorder` value in confdb (`ros2-exporter-agent/configuration`) should look like:
   ```
   cos_rosbag2_recorder:
     ros__parameters:
@@ -46,9 +46,15 @@ plugs:
   rob-cos-common-read:
     interface: content
     target: $SNAP_COMMON/rob-cos-shared-data
-  configuration-read:
-    interface: content
-    target: $SNAP_COMMON/configuration
+  confdb-configuration:
+    interface: confdb
+    account: canonical-robotics
+    view: ros2-exporter-agent/configuration
+    role: custodian
+
+hooks:
+  observe-view-confdb-configuration:
+    plugs: [network, network-bind]
 
 parts:
   local-files:
@@ -320,23 +326,18 @@ parts:
       - ros-jazzy-rmw-connextdds
 
 apps:
-  read-configuration:
-    command: usr/bin/read-configuration.sh
-    daemon: oneshot
-    install-mode: disable
-    before: [recorder]
   recorder:
     command: usr/bin/record.sh
     daemon: simple
     install-mode: disable
     extensions: [ros2-jazzy]
-    plugs: [network, network-bind]
+    plugs: [network, network-bind, confdb-configuration]
   synchronization:
     command: usr/bin/sync.sh
     daemon: simple
     install-mode: disable
     timer: "00:00-24:00/720" # every 2 minutes
-    plugs: [network, network-bind, rob-cos-common-read]
+    plugs: [network, network-bind, rob-cos-common-read, confdb-configuration]
   daily-rotation:
     command: usr/bin/daily-rotation.sh
     daemon: simple

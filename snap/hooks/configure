@@ -1,26 +1,5 @@
 #!/bin/bash -eu
 
-RCLONE_CONFIGURATION=$(snapctl get rclone-conf)
-ROSBAG2_RECORDER_CONFIGURATION=$(snapctl get rosbag2-recorder)
-
-if [[ -n "${RCLONE_CONFIGURATION}" ]]; then
-  RCLONE_CONFIG_FILE="$(mktemp)"
-  trap 'rm -f "${RCLONE_CONFIG_FILE}"' EXIT
-  printf '%s\n' "${RCLONE_CONFIGURATION}" > "${RCLONE_CONFIG_FILE}"
-
-  if ! rclone listremotes --config "${RCLONE_CONFIG_FILE}"; then
-    >&2 echo "Invalid rclone configuration provided in rclone-conf."
-    logger -t "${SNAP_NAME}" "Invalid rclone configuration provided in rclone-conf."
-    exit 1
-  fi
-fi
-
-if [[ -n "${ROSBAG2_RECORDER_CONFIGURATION}" ]]; then
-  if ! yq >/dev/null <<<"${ROSBAG2_RECORDER_CONFIGURATION}"; then
-    >&2 echo "Invalid YAML provided in rosbag2-recorder."
-    logger -t "${SNAP_NAME}" "Invalid YAML provided in rosbag2-recorder."
-    exit 1
-  fi
-fi
+logger -t "${SNAP_NAME}" "Configure hook called"
 
 snapctl restart "${SNAP_NAME}" 2>&1 || true
