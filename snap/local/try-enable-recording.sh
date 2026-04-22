@@ -10,8 +10,7 @@ if ! snapctl is-connected configuration-read; then
 fi
 
 if ! snapctl is-connected rob-cos-common-read; then
-	logger -t "${SNAP_NAME}" "Cannot start recorder yet, missing required interface: rob-cos-common-read"
-	exit 0
+	logger -t "${SNAP_NAME}" "rob-cos-common-read is not connected."
 fi
 
 ## if auto-clean started correctly we can start recording
