@@ -8,8 +8,8 @@ if [[ -n "${RCLONE_CONFIGURATION}" ]]; then
   . "${SNAP}/usr/bin/write-tmp-file.sh" "${RCLONE_CONFIGURATION}" RCLONE_CONFIG_FILE
 
   if ! rclone listremotes --config "${RCLONE_CONFIG_FILE}"; then
-    >&2 echo "Invalid rclone configuration provided in rclone-conf."
-    logger -t "${SNAP_NAME}" "Invalid rclone configuration provided in rclone-conf."
+    >&2 echo "Invalid rclone configuration provided in confdb view :confdb-configuration, key rclone."
+    logger -t "${SNAP_NAME}" "Invalid rclone configuration provided in confdb view :confdb-configuration, key rclone."
     exit 1
   fi
 fi
