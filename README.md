@@ -4,7 +4,7 @@ The ROS 2 data exporter is recording ROS 2 data and exporting them on a server f
 ## Requirement
 
 - snapd >= 2.60.4+git1367.g558a947
-- Confdb experimental feature enabled in snapd: `sudo snap set system experimental.confdbs=true`
+- Confdb experimental feature enabled in snapd: `sudo snap set system experimental.confdb=true`
 
 ## Synchronization setup
 
