@@ -1,5 +1,0 @@
-#!/bin/bash -eu
-
-logger -t "${SNAP_NAME}" "Configure hook called"
-
-snapctl restart "${SNAP_NAME}" 2>&1 || true
