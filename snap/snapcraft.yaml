@@ -6,9 +6,9 @@ description: |
   The ROS 2 data exporter is recording ROS 2 data
   and exporting them on a server for later consultation
 
-  Add your private ssh-key for the storage server in:
+  Add your private ssh-key for the storage server at:
 
-   /root/snap/ros2-exporter-agent/common/.ssh/
+   /root/snap/ros2-exporter-agent/common/device_rsa_key
 
   The `rclone-conf` should look like:
 
