@@ -22,6 +22,6 @@ jobs:
     secrets:
       snapstore-login: ${{ secrets.STORE_LOGIN }}
     with:
-      runs-on: '["ubuntu-latest", ["self-hosted", "linux", "ARM64", "large", "noble"]]'
+      runs-on: '["ubuntu-latest", "ubuntu-24.04-arm"]'
       git-ref: ${{ inputs.branch-name == '' && github.ref || inputs.branch-name }}
       snap-risk: candidate
