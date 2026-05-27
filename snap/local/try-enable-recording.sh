@@ -25,8 +25,8 @@ if snapctl services "${SNAP_NAME}.auto-clean" | grep -q enabled; then
 		snapctl start --enable "${SNAP_NAME}.recorder" 2>&1 || true
 	fi
 else
-	logger -t "${SNAP_NAME}" "auto-clean service not enabled yet - delaying recorder start"
-	exit 0
+	echo "auto-clean service not enabled - could not start recorder to avoid filling up disk"
+	exit 1
 fi
 
 if snapctl services "${SNAP_NAME}.synchronization"| grep -q inactive; then
