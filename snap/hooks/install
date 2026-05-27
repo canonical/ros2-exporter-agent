@@ -4,6 +4,7 @@
 snapctl set device-uid!
 snapctl set topic-regex!
 snapctl set topic-exclude!
+snapctl set config-ready=false
 
 # default parameters
 snapctl set remote-server-ip!
