@@ -1,16 +1,17 @@
-#!/usr/bin/bash -e
+#!/usr/bin/bash -eu
 
-STORAGE_PATH="$(snapctl get storage-base-path)"
-REMOTE_SERVER_IP="$(snapctl get remote-server-ip)"
-REMOTE_SERVER_PORT="$(snapctl get remote-server-port)"
-DEVICE_ID="$(snapctl get device-uid)"
+RCLONE_CONFIG="$(snapctl get rclone-conf)"
 
-if [ -n "$DEVICE_ID" ]; then
-    STORAGE_PATH="${STORAGE_PATH%/}/$DEVICE_ID"
-    snapctl set storage-path=$STORAGE_PATH
-else
-    >&2 echo "DEVICE_ID is not set. Make sure it's available in the rob-cos-data-sharing snap."
+if [[ -z "${RCLONE_CONFIG}" ]]; then
+  logger -t "${SNAP_NAME}" "Rclone configuration is not set."
+  exit 1
 fi
+
+logger -t "${SNAP_NAME}" "Starting sync."
+
+RCLONE_CONFIG_FILE="$(mktemp)"
+trap 'rm -f "${RCLONE_CONFIG_FILE}"' EXIT
+printf '%s\n' "${RCLONE_CONFIG}" > "${RCLONE_CONFIG_FILE}"
 
 # We copy the private key so that we can modify the permissions. 
 # The content-sharing interfce sets the permissions to 644 
@@ -19,24 +20,15 @@ fi
 # imposes it's own permission and this snap has read-only access.
 # The alternative would be to give this snap write access. 
 
-if [ -f $SNAP_COMMON/rob-cos-shared-data/device_rsa_key ]; then
-    cp $SNAP_COMMON/rob-cos-shared-data/device_rsa_key  $SNAP_USER_COMMON/
-    chmod 600 $SNAP_USER_COMMON/device_rsa_key
+if [ -f "${SNAP_COMMON}/rob-cos-shared-data/device_rsa_key" ]; then
+    cp "${SNAP_COMMON}/rob-cos-shared-data/device_rsa_key" "${SNAP_USER_COMMON}/"
+    chmod 600 "${SNAP_USER_COMMON}/device_rsa_key"
 else
-    >&2 echo "could not find device_rsa_key. Make sure it's available in the rob-cos-data-sharing snap."
+    >&2 echo "could not find device_rsa_key. If you need, make sure it's available in the rob-cos-data-sharing snap."
 fi
 
-
-cat > $SNAP_USER_COMMON/config <<EOF
-Host storage-server
-    User root
-    HostName $REMOTE_SERVER_IP
-    StrictHostKeyChecking no
-    UserKnownHostsFile=/dev/null
-    IdentityFile $SNAP_USER_COMMON/device_rsa_key
-EOF
-
-echo "SSH config file and keys setup completed."
+echo "Starting to copy the files with Rclone."
 
 mkdir -p "${SNAP_COMMON}/data"
-rsync -avz -e "ssh -F ${SNAP_USER_COMMON}/config -p ${REMOTE_SERVER_PORT}" --min-size=1 "${SNAP_COMMON}/data/" "storage-server:${STORAGE_PATH}" 2>&1 || true
+rclone copy --config "${RCLONE_CONFIG_FILE}" \
+  --min-size 1b "${SNAP_COMMON}/data/" "bagstore:/" 2>&1 || true

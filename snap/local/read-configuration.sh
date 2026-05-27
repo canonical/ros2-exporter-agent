@@ -4,21 +4,19 @@ echo "Reading configuration yaml from configuration snap."
 
 snapctl set config-ready=false
 
-CONFIGURATION_FILE_PATH=$SNAP_COMMON/configuration/ros2-data-exporter.yaml
+RCLONE_CONFIGURATION_FILE_PATH=$SNAP_COMMON/configuration/ros2-exporter-agent/rclone.conf
+ROSBAG2_RECORDER_CONFIGURATION_FILE_PATH=$SNAP_COMMON/configuration/ros2-exporter-agent/rosbag2-recorder.yaml
 
-if [ ! -f "$CONFIGURATION_FILE_PATH" ]; then
-    echo "Configuration file '$CONFIGURATION_FILE_PATH' does not exist."
-    exit 1
+if [ -f "$RCLONE_CONFIGURATION_FILE_PATH" ]; then
+    snapctl set rclone-conf="$(<"$RCLONE_CONFIGURATION_FILE_PATH")"
+    echo "Loaded rclone.conf into rclone-conf."
 fi
 
-snapctl set device-uid="$(yq '.uid' $CONFIGURATION_FILE_PATH)"
-snapctl set topic-regex="$(yq '.topic-regex' $CONFIGURATION_FILE_PATH)"
-snapctl set topic-exclude="$(yq '.topic-exclude' $CONFIGURATION_FILE_PATH)"
-snapctl set remote-server-ip="$(yq '.remote-server-ip' $CONFIGURATION_FILE_PATH)"
-snapctl set remote-server-port="$(yq '(.remote-server-port // 2222)' $CONFIGURATION_FILE_PATH)"
-snapctl set storage-base-path="$(yq '(.storage-base-path // "/var/lib/caddy-fileserver/")' $CONFIGURATION_FILE_PATH)"
-snapctl set max-bag-duration="$(yq '(.max-bag-duration // 300)' $CONFIGURATION_FILE_PATH)"
-snapctl set max-bag-size="$(yq '(.max-bag-size // 250000000)' $CONFIGURATION_FILE_PATH)"
+if [ -f "$ROSBAG2_RECORDER_CONFIGURATION_FILE_PATH" ]; then
+    snapctl set rosbag2-recorder="$(<"$ROSBAG2_RECORDER_CONFIGURATION_FILE_PATH")"
+    echo "Loaded rosbag2-recorder.yaml into rosbag2-recorder."
+fi
+
 snapctl set config-ready=true
 
 echo "Configuration read."

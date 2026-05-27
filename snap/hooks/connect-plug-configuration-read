@@ -1,9 +1,15 @@
-#!/bin/sh -e
+#!/bin/sh -eu
 
-CONFIGURATION_FILE_PATH="${SNAP_COMMON}/configuration/ros2-data-exporter.yaml"
+RCLONE_CONFIGURATION_FILE_PATH="${SNAP_COMMON}/configuration/ros2-exporter-agent/rclone.conf"
+ROSBAG2_CONFIGURATION_FILE_PATH="${SNAP_COMMON}/configuration/ros2-exporter-agent/rosbag2-recorder.yaml"
 
-if [ ! -f "${CONFIGURATION_FILE_PATH}" ]; then
-    echo "Configuration file '${CONFIGURATION_FILE_PATH}' does not exist."
+if [ ! -f "${RCLONE_CONFIGURATION_FILE_PATH}" ]; then
+    echo "Rclone configuration file '${RCLONE_CONFIGURATION_FILE_PATH}' does not exist."
+    exit 1
+fi
+
+if [ ! -f "${ROSBAG2_CONFIGURATION_FILE_PATH}" ]; then
+    echo "Rosbag2-recorder configuration file '${ROSBAG2_CONFIGURATION_FILE_PATH}' does not exist."
     exit 1
 fi
 
