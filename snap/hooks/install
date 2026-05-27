@@ -1,5 +1,7 @@
 #!/bin/sh -eu
 
+snapctl set config-ready=false
+
 #rclone.conf configuration
 snapctl set rclone-conf!
 

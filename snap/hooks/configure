@@ -24,3 +24,5 @@ if [[ -n "${ROSBAG2_RECORDER_CONFIGURATION}" ]]; then
 fi
 
 snapctl restart "${SNAP_NAME}" 2>&1 || true
+
+"${SNAP}/usr/bin/try-enable-recording.sh"
