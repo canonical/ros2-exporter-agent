@@ -14,6 +14,11 @@ if ! snapctl is-connected rob-cos-common-read; then
 	exit 0
 fi
 
+if [ "$(snapctl get config-ready)" != "true" ]; then
+	logger -t "${SNAP_NAME}" "Cannot start recorder yet, configuration not ready"
+	exit 0
+fi
+
 ## if auto-clean started correctly we can start recording
 if snapctl services "${SNAP_NAME}.auto-clean" | grep -q enabled; then
 	if snapctl services "${SNAP_NAME}.recorder" | grep -q inactive; then

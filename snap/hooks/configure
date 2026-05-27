@@ -13,3 +13,5 @@ for NUMBER_OPTION in ${NUMBER_OPTIONS}; do
 done
 
 snapctl restart ${SNAP_NAME} 2>&1 || true
+
+"${SNAP}/usr/bin/try-enable-recording.sh"
