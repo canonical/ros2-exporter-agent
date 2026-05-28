@@ -7,7 +7,7 @@ if [ ! -f "${CONFIGURATION_FILE_PATH}" ]; then
     exit 1
 fi
 
-snapctl start --enable "${SNAP_NAME}.read-configuration" 2>&1
+"${SNAP}/usr/bin/read-configuration.sh"
 
 "${SNAP}/usr/bin/try-enable-recording.sh"
 
