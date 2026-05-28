@@ -9,6 +9,9 @@ fi
 
 "${SNAP}/usr/bin/read-configuration.sh"
 
+# Keep the oneshot app enabled for subsequent snap restarts/reconfigurations
+snapctl start --enable "${SNAP_NAME}.read-configuration" 2>&1 || true
+
 "${SNAP}/usr/bin/try-enable-recording.sh"
 
 snapctl restart "${SNAP_NAME}" 2>&1 || true
