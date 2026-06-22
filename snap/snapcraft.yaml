@@ -4,14 +4,16 @@ version: git
 summary: ROS 2 data exporter
 description: |
   The ROS 2 data exporter is recording ROS 2 data
-  and exporting them on a server for later consultation
+  and exporting them on a server for later consultation.
 
-  Add your private ssh-key for the storage server at:
+  Configuration files should be placed at:
+    /root/snap/ros2-exporter-agent/common/configuration/ros2-exporter-agent/
 
-   /root/snap/ros2-exporter-agent/common/device_rsa_key
+  Or provided via the `configuration-read` content interface.
 
-  The `rclone-conf` should look like:
+  Required configuration files:
 
+  1. `rclone.conf` - rclone configuration for the storage server:
   ```
   [fileserver]
   type = sftp
@@ -24,7 +26,7 @@ description: |
   remote = fileserver:/var/lib/caddy-fileserver/robot-123
   ```
 
-  The `rosbag2-recorder` should look like:
+  2. `rosbag2-recorder.yaml` - recorder parameters:
   ```
   cos_rosbag2_recorder:
     ros__parameters:
@@ -56,8 +58,7 @@ parts:
     source: snap/local/
     organize:
       '*.sh': usr/bin/
-    stage-snaps:
-      - yq
+      'templates/': usr/share/templates/
     stage-packages:
       - fd-find
       - iputils-ping
@@ -320,11 +321,6 @@ parts:
       - ros-jazzy-rmw-connextdds
 
 apps:
-  read-configuration:
-    command: usr/bin/read-configuration.sh
-    daemon: oneshot
-    install-mode: disable
-    before: [recorder]
   recorder:
     command: usr/bin/record.sh
     daemon: simple

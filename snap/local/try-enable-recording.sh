@@ -1,21 +1,24 @@
 #!/usr/bin/bash -e
 
+RCLONE_CONFIG_FILE="${SNAP_COMMON}/configuration/ros2-exporter-agent/rclone.conf"
+ROSBAG2_RECORDER_CONFIG_FILE="${SNAP_COMMON}/configuration/ros2-exporter-agent/rosbag2-recorder.yaml"
+
 if snapctl services "${SNAP_NAME}.auto-clean" | grep -q inactive; then
 	snapctl start --enable "${SNAP_NAME}.auto-clean" 2>&1 || true
 fi
 
-if ! snapctl is-connected configuration-read; then
-	logger -t "${SNAP_NAME}" "Cannot start recorder yet, missing required interface: configuration-read"
+if [ ! -f "${RCLONE_CONFIG_FILE}" ]; then
+	logger -t "${SNAP_NAME}" "Cannot start recorder yet, rclone configuration not found at ${RCLONE_CONFIG_FILE}"
+	exit 0
+fi
+
+if [ ! -f "${ROSBAG2_RECORDER_CONFIG_FILE}" ]; then
+	logger -t "${SNAP_NAME}" "Cannot start recorder yet, rosbag2-recorder configuration not found at ${ROSBAG2_RECORDER_CONFIG_FILE}"
 	exit 0
 fi
 
 if ! snapctl is-connected rob-cos-common-read; then
 	logger -t "${SNAP_NAME}" "rob-cos-common-read is not connected."
-fi
-
-if [ "$(snapctl get config-ready)" != "true" ]; then
-	logger -t "${SNAP_NAME}" "Cannot start recorder yet, configuration not ready"
-	exit 0
 fi
 
 ## if auto-clean started correctly we can start recording

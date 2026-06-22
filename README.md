@@ -28,6 +28,27 @@ drwx------ 14 root root 4.0K sept. 29 16:32 ..
 - Copy the public key of the client in the `~/.ssh/authorized_keys`
 
 
-## Snap parameters
-- `rclone-conf`, full `rclone` configuration content used by the synchronization daemon. It must define the `bagstore` remote used by `sync.sh`.
-- `rosbag2-recorder`, YAML content passed to `rosbag2_transport recorder` as `--params-file`.
+## Configuration
+
+Configuration files are read directly from:
+```
+/root/snap/ros2-exporter-agent/common/configuration/ros2-exporter-agent/
+```
+
+On install, template files are placed in this directory. Rename them to activate:
+- `rclone.conf.template` -> `rclone.conf`
+- `rosbag2-recorder.yaml.template` -> `rosbag2-recorder.yaml`
+
+Configuration can also be provided via the `configuration-read` content interface from another snap.
+
+### `rclone.conf`
+
+Full `rclone` configuration used by the synchronization daemon. It must define the `bagstore` remote used by `sync.sh`.
+
+Reference: https://rclone.org/docs/
+
+### `rosbag2-recorder.yaml`
+
+YAML parameters passed to `rosbag2_transport recorder` as `--params-file`.
+
+Reference: https://github.com/ros2/rosbag2/tree/rolling/rosbag2_transport

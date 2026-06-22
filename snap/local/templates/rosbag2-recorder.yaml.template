@@ -1,0 +1,18 @@
+# rosbag2 recorder parameters for ros2-exporter-agent
+#
+# Rename this file to 'rosbag2-recorder.yaml' to activate it.
+#
+# This file configures the ROS 2 bag recorder parameters.
+#
+# Reference: https://github.com/ros2/rosbag2/tree/rolling/rosbag2_transport
+#
+# Example configuration:
+#
+cos_rosbag2_recorder:
+  ros__parameters:
+    record:
+      regex: '.*'
+    storage:
+      storage_id: 'mcap'
+      max_bagfile_duration: 1230
+      max_bagfile_size: 10000000000

@@ -1,17 +1,13 @@
 #!/usr/bin/bash -eu
 
-RCLONE_CONFIG="$(snapctl get rclone-conf)"
+RCLONE_CONFIG_FILE="${SNAP_COMMON}/configuration/ros2-exporter-agent/rclone.conf"
 
-if [[ -z "${RCLONE_CONFIG}" ]]; then
-  logger -t "${SNAP_NAME}" "Rclone configuration is not set."
+if [[ ! -f "${RCLONE_CONFIG_FILE}" ]]; then
+  logger -t "${SNAP_NAME}" "Rclone configuration file not found at ${RCLONE_CONFIG_FILE}."
   exit 1
 fi
 
 logger -t "${SNAP_NAME}" "Starting sync."
-
-RCLONE_CONFIG_FILE="$(mktemp)"
-trap 'rm -f "${RCLONE_CONFIG_FILE}"' EXIT
-printf '%s\n' "${RCLONE_CONFIG}" > "${RCLONE_CONFIG_FILE}"
 
 # We copy the private key so that we can modify the permissions. 
 # The content-sharing interfce sets the permissions to 644 

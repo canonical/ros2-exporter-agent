@@ -1,11 +1,7 @@
 #!/bin/sh -eu
 
-snapctl set config-ready=false
-
-#rclone.conf configuration
-snapctl set rclone-conf!
-
-# rosbag2-recorder configuration
-snapctl set rosbag2-recorder!
-
 mkdir -p "${SNAP_COMMON}/data"
+
+CONFIG_DIR="${SNAP_COMMON}/configuration/ros2-exporter-agent"
+mkdir -p "${CONFIG_DIR}"
+
