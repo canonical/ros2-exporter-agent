@@ -1,3 +1,3 @@
 #!/bin/sh -eu
 
-mkdir -p "${SNAP_COMMON}/configuration/ros2-exporter-agent"
+mkdir -p "${SNAP_COMMON}/local-configuration"

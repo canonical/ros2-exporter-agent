@@ -1,7 +1,13 @@
 #!/bin/sh -eu
 
 mkdir -p "${SNAP_COMMON}/data"
+mkdir -p "${SNAP_COMMON}/local-configuration"
 
-CONFIG_DIR="${SNAP_COMMON}/configuration/ros2-exporter-agent"
-mkdir -p "${CONFIG_DIR}"
+# Place template files if they don't already exist
+if [ ! -f "${SNAP_COMMON}/local-configuration/rclone.conf" ]; then
+    cp "${SNAP}/usr/share/templates/rclone.conf.template" "${SNAP_COMMON}/local-configuration/rclone.conf.template"
+fi
 
+if [ ! -f "${SNAP_COMMON}/local-configuration/rosbag2-recorder.yaml" ]; then
+    cp "${SNAP}/usr/share/templates/rosbag2-recorder.yaml.template" "${SNAP_COMMON}/local-configuration/rosbag2-recorder.yaml.template"
+fi

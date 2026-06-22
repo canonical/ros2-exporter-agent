@@ -1,19 +1,21 @@
 #!/usr/bin/bash -e
 
-RCLONE_CONFIG_FILE="${SNAP_COMMON}/configuration/ros2-exporter-agent/rclone.conf"
-ROSBAG2_RECORDER_CONFIG_FILE="${SNAP_COMMON}/configuration/ros2-exporter-agent/rosbag2-recorder.yaml"
+# Content sharing takes priority over local configuration
+CONTENT_CONFIG_DIR="${SNAP_COMMON}/configuration/ros2-exporter-agent"
+LOCAL_CONFIG_DIR="${SNAP_COMMON}/local-configuration"
 
 if snapctl services "${SNAP_NAME}.auto-clean" | grep -q inactive; then
 	snapctl start --enable "${SNAP_NAME}.auto-clean" 2>&1 || true
 fi
 
-if [ ! -f "${RCLONE_CONFIG_FILE}" ]; then
-	logger -t "${SNAP_NAME}" "Cannot start recorder yet, rclone configuration not found at ${RCLONE_CONFIG_FILE}"
+# Check if config files exist in either location
+if [ ! -f "${CONTENT_CONFIG_DIR}/rclone.conf" ] && [ ! -f "${LOCAL_CONFIG_DIR}/rclone.conf" ]; then
+	logger -t "${SNAP_NAME}" "Cannot start recorder yet, rclone configuration not found"
 	exit 0
 fi
 
-if [ ! -f "${ROSBAG2_RECORDER_CONFIG_FILE}" ]; then
-	logger -t "${SNAP_NAME}" "Cannot start recorder yet, rosbag2-recorder configuration not found at ${ROSBAG2_RECORDER_CONFIG_FILE}"
+if [ ! -f "${CONTENT_CONFIG_DIR}/rosbag2-recorder.yaml" ] && [ ! -f "${LOCAL_CONFIG_DIR}/rosbag2-recorder.yaml" ]; then
+	logger -t "${SNAP_NAME}" "Cannot start recorder yet, rosbag2-recorder configuration not found"
 	exit 0
 fi
 

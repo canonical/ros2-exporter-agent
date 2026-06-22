@@ -6,10 +6,18 @@ description: |
   The ROS 2 data exporter is recording ROS 2 data
   and exporting them on a server for later consultation.
 
-  Configuration files should be placed at:
-    /root/snap/ros2-exporter-agent/common/configuration/ros2-exporter-agent/
+  ## Configuration
 
-  Or provided via the `configuration-read` content interface.
+  Configuration is loaded from two locations (in priority order):
+
+  1. Content sharing interface (`configuration-read`):
+     /root/snap/ros2-exporter-agent/common/configuration/ros2-exporter-agent/
+
+  2. Local configuration:
+     /root/snap/ros2-exporter-agent/common/local-configuration/
+
+  Template files are placed in the local-configuration directory on install.
+  Rename them (remove `.template` suffix) and edit to activate.
 
   Required configuration files:
 

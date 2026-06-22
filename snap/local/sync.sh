@@ -1,9 +1,15 @@
 #!/usr/bin/bash -eu
 
-RCLONE_CONFIG_FILE="${SNAP_COMMON}/configuration/ros2-exporter-agent/rclone.conf"
+# Content sharing takes priority over local configuration
+CONTENT_CONFIG_DIR="${SNAP_COMMON}/configuration/ros2-exporter-agent"
+LOCAL_CONFIG_DIR="${SNAP_COMMON}/local-configuration"
 
-if [[ ! -f "${RCLONE_CONFIG_FILE}" ]]; then
-  logger -t "${SNAP_NAME}" "Rclone configuration file not found at ${RCLONE_CONFIG_FILE}."
+if [ -f "${CONTENT_CONFIG_DIR}/rclone.conf" ]; then
+  RCLONE_CONFIG_FILE="${CONTENT_CONFIG_DIR}/rclone.conf"
+elif [ -f "${LOCAL_CONFIG_DIR}/rclone.conf" ]; then
+  RCLONE_CONFIG_FILE="${LOCAL_CONFIG_DIR}/rclone.conf"
+else
+  logger -t "${SNAP_NAME}" "Rclone configuration file not found."
   exit 1
 fi
 

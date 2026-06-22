@@ -1,9 +1,15 @@
 #!/usr/bin/bash -eu
 
-ROSBAG2_RECORDER_CONFIG_FILE="${SNAP_COMMON}/configuration/ros2-exporter-agent/rosbag2-recorder.yaml"
+# Content sharing takes priority over local configuration
+CONTENT_CONFIG_DIR="${SNAP_COMMON}/configuration/ros2-exporter-agent"
+LOCAL_CONFIG_DIR="${SNAP_COMMON}/local-configuration"
 
-if [[ ! -f "${ROSBAG2_RECORDER_CONFIG_FILE}" ]]; then
-  logger -t "${SNAP_NAME}" "rosbag2-recorder configuration file not found at ${ROSBAG2_RECORDER_CONFIG_FILE}."
+if [ -f "${CONTENT_CONFIG_DIR}/rosbag2-recorder.yaml" ]; then
+  ROSBAG2_RECORDER_CONFIG_FILE="${CONTENT_CONFIG_DIR}/rosbag2-recorder.yaml"
+elif [ -f "${LOCAL_CONFIG_DIR}/rosbag2-recorder.yaml" ]; then
+  ROSBAG2_RECORDER_CONFIG_FILE="${LOCAL_CONFIG_DIR}/rosbag2-recorder.yaml"
+else
+  logger -t "${SNAP_NAME}" "rosbag2-recorder configuration file not found."
   exit 1
 fi
 

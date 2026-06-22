@@ -30,16 +30,17 @@ drwx------ 14 root root 4.0K sept. 29 16:32 ..
 
 ## Configuration
 
-Configuration files are read directly from:
-```
-/root/snap/ros2-exporter-agent/common/configuration/ros2-exporter-agent/
-```
+Configuration is loaded from two locations (in priority order):
 
-On install, template files are placed in this directory. Rename them to activate:
+1. **Content sharing** (`configuration-read` interface):
+   `/root/snap/ros2-exporter-agent/common/configuration/ros2-exporter-agent/`
+
+2. **Local configuration**:
+   `/root/snap/ros2-exporter-agent/common/local-configuration/`
+
+On install, template files are placed in the local-configuration directory. Rename them to activate:
 - `rclone.conf.template` -> `rclone.conf`
 - `rosbag2-recorder.yaml.template` -> `rosbag2-recorder.yaml`
-
-Configuration can also be provided via the `configuration-read` content interface from another snap.
 
 ### `rclone.conf`
 
