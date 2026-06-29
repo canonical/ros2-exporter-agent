@@ -11,10 +11,10 @@ description: |
   Configuration is loaded from two locations (in priority order):
 
   1. Content sharing interface (`configuration-read`):
-     /root/snap/ros2-exporter-agent/common/configuration/ros2-exporter-agent/
+     /var/snap/ros2-exporter-agent/common/configuration/ros2-exporter-agent/
 
   2. Local configuration:
-     /root/snap/ros2-exporter-agent/common/local-configuration/
+     /var/snap/ros2-exporter-agent/common/local-configuration/
 
   Template files are placed in the local-configuration directory on install.
   Rename them (remove `.template` suffix) and edit to activate.
@@ -28,7 +28,7 @@ description: |
   host = your.fileserver.example.com
   user = root
   port = 2222
-  key_file = /root/snap/ros2-exporter-agent/common/device_rsa_key
+  key_file = /var/snap/ros2-exporter-agent/common/device_rsa_key
   [bagstore]
   type = alias
   remote = fileserver:/var/lib/caddy-fileserver/robot-123

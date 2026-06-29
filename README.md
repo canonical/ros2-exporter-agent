@@ -11,9 +11,9 @@ In order for the synchronization to function, a server must be setup.
 
 ### Client setup
 - Generate an ssh key to access the server
-- Place the ssh key in `/root/snap/ros2-exporter-agent/common/` (the synchronization daemon will be running as root)
+- Place the ssh key in `/var/snap/ros2-exporter-agent/common/` (the synchronization daemon will be running as root)
 
-The `/root/snap/ros2-exporter-agent/common/` content should look like:
+The `/var/snap/ros2-exporter-agent/common/` content should look like:
 ```
 drwx------  2 root root 4.0K sept. 29 16:32 .
 drwx------ 14 root root 4.0K sept. 29 16:32 ..
@@ -33,10 +33,10 @@ drwx------ 14 root root 4.0K sept. 29 16:32 ..
 Configuration is loaded from two locations (in priority order):
 
 1. **Content sharing** (`configuration-read` interface):
-   `/root/snap/ros2-exporter-agent/common/configuration/ros2-exporter-agent/`
+   `/var/snap/ros2-exporter-agent/common/configuration/ros2-exporter-agent/`
 
 2. **Local configuration**:
-   `/root/snap/ros2-exporter-agent/common/local-configuration/`
+   `/var/snap/ros2-exporter-agent/common/local-configuration/`
 
 On install, template files are placed in the local-configuration directory. Rename them to activate:
 - `rclone.conf.template` -> `rclone.conf`
