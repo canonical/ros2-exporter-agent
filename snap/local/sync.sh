@@ -18,9 +18,9 @@ fi
 # See: https://github.com/rclone/rclone/issues/3655
 # The content sharing configuration mount is read-only,
 # We must copy to a writable location.
-RCLONE_TEMP_CONFIG=$(mktemp "${SNAP_COMMON}/rclone.conf.XXXXXX")
-cp "${RCLONE_CONFIG_FILE}" "${RCLONE_TEMP_CONFIG}"
+RCLONE_TEMP_CONFIG="$(mktemp "${SNAP_COMMON}/rclone.conf.XXXXXX")"
 trap 'rm -f "${RCLONE_TEMP_CONFIG}"' EXIT
+cp "${RCLONE_CONFIG_FILE}" "${RCLONE_TEMP_CONFIG}"
 
 logger -t "${SNAP_NAME}" "Starting sync."
 
