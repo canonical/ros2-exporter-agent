@@ -18,7 +18,7 @@ mkdir -p "${SNAP_COMMON}/data"
 
 ARGUMENTS=(
   --ros-args
-  --remap __node:=cos_rosbag2_recorder
+  --remap __node:=ros2_exporter_agent_rosbag2_recorder
   -p "storage.uri:=${BAG_URI}"
   --params-file "${ROSBAG2_RECORDER_CONFIG_FILE}"
 )
