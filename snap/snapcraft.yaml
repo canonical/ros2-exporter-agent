@@ -4,14 +4,14 @@ version: git
 summary: Record and export ROS 2 rosbags to S3, SFTP/SSH, and more
 
 description: |
-  ros2-exporter-agent is a general-purpose utility snap that records ROS 2
+  ros2-exporter-agent is a utility snap that records ROS 2
   data into rosbags and automatically uploads them to a remote storage backend
   for later consultation.
 
   Point it at an S3 bucket or a simple SFTP/SSH server and
-  your robots will record and store their bags automatically. Uploads are
-  powered by rclone, so any rclone-supported backend works. It also integrates
-  with Canonical Observability Stack (COS) for fleet deployments.
+  your robots will record and store their bags automatically.
+  Uploads are powered by rclone, so any rclone-supported backend works.
+  It also integrates with Canonical Observability Stack (COS) for fleet deployments.
 
   Features:
 
@@ -21,10 +21,8 @@ description: |
     (S3, SFTP/SSH, and any other rclone backend).
   - Daily rotation of bags into fresh timestamped directories at midnight.
   - Automatic cleanup of already-synced local bags to protect disk usage.
-  - Flexible configuration from a local file or shared over the content
-    interface (for centralized/fleet management with COS).
-  - Bundles a broad set of ROS 2 message definitions and DDS vendors so bags of
-    virtually any message type can be recorded.
+  - Flexible configuration from a local file or shared over the
+    content-sharing interface for automated configuration.
 
   ## Configuration
 
@@ -45,7 +43,7 @@ description: |
   Required configuration files:
 
   1. `rclone.conf` - rclone configuration defining a `bagstore` remote that
-     bags are uploaded to. Any rclone backend works; below are two common
+     bags are uploaded to. Any rclone backend works, below are two common
      examples.
 
   Amazon S3 (or S3-compatible):

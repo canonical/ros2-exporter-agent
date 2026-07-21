@@ -1,6 +1,6 @@
 # ros2-exporter-agent
 
-`ros2-exporter-agent` is a general-purpose utility snap that records ROS 2 data
+`ros2-exporter-agent` is a utility snap that records ROS 2 data
 into rosbags and automatically uploads them to a remote storage backend for
 later consultation.
 
@@ -20,10 +20,8 @@ the [Canonical Observability Stack (COS)](https://canonical-robotics.readthedocs
   rclone (S3, SFTP/SSH, and any other rclone backend).
 - **Daily rotation** — moves bags into a fresh timestamped directory at midnight.
 - **Auto-clean** — deletes already-synced local bags to protect disk usage.
-- **Flexible configuration** — loaded from a local file or shared over the
-  content interface for centralized/fleet management.
-- **Broad ROS 2 support** — bundles a large set of ROS 2 message definitions and
-  DDS vendors so bags of virtually any message type can be recorded.
+- **Flexible configuration** — loaded from a local file or from the
+  content-sharing interface for automated configuration.
 
 ## Requirement
 
@@ -46,12 +44,6 @@ Rename them (remove the `.template` suffix) to activate:
 
 A reference content-sharing implementation is available: [rob-cos-demo-configuration](https://github.com/canonical/rob-cos-demo-configuration)
 
-### `rclone.conf`
-
-Full [`rclone`](https://rclone.org/docs/) configuration used by the synchronization daemon.
-It must define a `bagstore` remote, which is the destination bags are uploaded to.
-Any rclone backend can be used; if you start from the installed `rclone.conf.template`, update values like `key_file` and `remote` to match your environment.
-
 ### `rosbag2-recorder.yaml`
 
 [YAML parameters](https://github.com/ros2/rosbag2/tree/rolling/rosbag2_transport) passed to `rosbag2_transport recorder` as `--params-file`.
@@ -72,6 +64,14 @@ ros2_exporter_agent_rosbag2_recorder:
 The daily-rotation daemon moves the bags to a new timestamped directory at
 midnight. Make sure the time is properly configured on the machine.
 This can be verified with `timedatectl status`.
+
+### `rclone.conf`
+
+Full [`rclone`](https://rclone.org/docs/) configuration used by the synchronization daemon.
+It must define a `bagstore` remote, which is the destination bags are uploaded to.
+Any rclone backend can be used.
+if you start from the installed `rclone.conf.template`,
+update values like `key_file` and `remote` to match your environment.
 
 ## Storage setup
 
