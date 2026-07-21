@@ -68,7 +68,7 @@ description: |
   host = your.fileserver.example.com
   user = root
   port = 2222
-  key_file = /var/snap/ros2-exporter-agent/common/device_rsa_key
+  key_file = /var/snap/ros2-exporter-agent/common/<my_private_key>
   [bagstore]
   type = alias
   remote = fileserver:/var/lib/robot-bags/robot-123
