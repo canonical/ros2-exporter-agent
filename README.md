@@ -70,7 +70,7 @@ This can be verified with `timedatectl status`.
 Full [`rclone`](https://rclone.org/docs/) configuration used by the synchronization daemon.
 It must define a `bagstore` remote, which is the destination bags are uploaded to.
 Any rclone backend can be used.
-if you start from the installed `rclone.conf.template`,
+If you start from the installed `rclone.conf.template`,
 update values like `key_file` and `remote` to match your environment.
 
 ## Storage setup
