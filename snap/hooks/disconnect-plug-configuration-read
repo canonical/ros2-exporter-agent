@@ -1,4 +1,4 @@
-snapctl stop --disable ${SNAP_NAME}.read-configuration 2>&1
+#!/bin/sh -eu
 
 snapctl stop --disable ${SNAP_NAME}.auto-clean 2>&1 || true
 

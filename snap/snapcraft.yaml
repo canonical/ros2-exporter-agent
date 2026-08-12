@@ -4,27 +4,37 @@ version: git
 summary: ROS 2 data exporter
 description: |
   The ROS 2 data exporter is recording ROS 2 data
-  and exporting them on a server for later consultation
+  and exporting them on a server for later consultation.
 
-  Add your private ssh-key for the storage server at:
+  ## Configuration
 
-   /root/snap/ros2-exporter-agent/common/device_rsa_key
+  Configuration is loaded from two locations (in priority order):
 
-  The `rclone-conf` should look like:
+  1. Content sharing interface (`configuration-read`):
+     /var/snap/ros2-exporter-agent/common/configuration/ros2-exporter-agent/
 
+  2. Local configuration:
+     /var/snap/ros2-exporter-agent/common/local-configuration/
+
+  Template files are placed in the local-configuration directory on install.
+  Rename them (remove `.template` suffix) and edit to activate.
+
+  Required configuration files:
+
+  1. `rclone.conf` - rclone configuration for the storage server:
   ```
   [fileserver]
   type = sftp
   host = your.fileserver.example.com
   user = root
   port = 2222
-  key_file = /root/snap/ros2-exporter-agent/common/device_rsa_key
+  key_file = /var/snap/ros2-exporter-agent/common/device_rsa_key
   [bagstore]
   type = alias
   remote = fileserver:/var/lib/caddy-fileserver/robot-123
   ```
 
-  The `rosbag2-recorder` should look like:
+  2. `rosbag2-recorder.yaml` - recorder parameters:
   ```
   cos_rosbag2_recorder:
     ros__parameters:
@@ -56,8 +66,7 @@ parts:
     source: snap/local/
     organize:
       '*.sh': usr/bin/
-    stage-snaps:
-      - yq
+      'templates/': usr/share/templates/
     stage-packages:
       - fd-find
       - iputils-ping
@@ -320,11 +329,6 @@ parts:
       - ros-jazzy-rmw-connextdds
 
 apps:
-  read-configuration:
-    command: usr/bin/read-configuration.sh
-    daemon: oneshot
-    install-mode: disable
-    before: [recorder]
   recorder:
     command: usr/bin/record.sh
     daemon: simple

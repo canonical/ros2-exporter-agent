@@ -1,23 +1,34 @@
 #!/usr/bin/bash -eu
 
-RCLONE_CONFIG="$(snapctl get rclone-conf)"
+# Content sharing takes priority over local configuration
+CONTENT_CONFIG_DIR="${SNAP_COMMON}/configuration/ros2-exporter-agent"
+LOCAL_CONFIG_DIR="${SNAP_COMMON}/local-configuration"
 
-if [[ -z "${RCLONE_CONFIG}" ]]; then
-  logger -t "${SNAP_NAME}" "Rclone configuration is not set."
+if [ -f "${CONTENT_CONFIG_DIR}/rclone.conf" ]; then
+  RCLONE_CONFIG_FILE="${CONTENT_CONFIG_DIR}/rclone.conf"
+elif [ -f "${LOCAL_CONFIG_DIR}/rclone.conf" ]; then
+  RCLONE_CONFIG_FILE="${LOCAL_CONFIG_DIR}/rclone.conf"
+else
+  logger -t "${SNAP_NAME}" "Rclone configuration file not found."
   exit 1
 fi
 
+# Rclone creates temp files in the same directory as its config for
+# atomic saves and env var replacement (see configfile.go Save()).
+# See: https://github.com/rclone/rclone/issues/3655
+# The content sharing configuration mount is read-only,
+# We must copy to a writable location.
+RCLONE_TEMP_CONFIG="$(mktemp "${SNAP_COMMON}/rclone.conf.XXXXXX")"
+trap 'rm -f "${RCLONE_TEMP_CONFIG}"' EXIT
+cp "${RCLONE_CONFIG_FILE}" "${RCLONE_TEMP_CONFIG}"
+
 logger -t "${SNAP_NAME}" "Starting sync."
 
-RCLONE_CONFIG_FILE="$(mktemp)"
-trap 'rm -f "${RCLONE_CONFIG_FILE}"' EXIT
-printf '%s\n' "${RCLONE_CONFIG}" > "${RCLONE_CONFIG_FILE}"
-
 # We copy the private key so that we can modify the permissions. 
-# The content-sharing interfce sets the permissions to 644 
+# The content-sharing interface sets the permissions to 644
 # which are too loose for the key to be used safely. We cannot 
 # modify the permission before because the content sharing snap
-# imposes it's own permission and this snap has read-only access.
+# imposes its own permission and this snap has read-only access.
 # The alternative would be to give this snap write access. 
 
 if [ -f "${SNAP_COMMON}/rob-cos-shared-data/device_rsa_key" ]; then
@@ -30,5 +41,5 @@ fi
 echo "Starting to copy the files with Rclone."
 
 mkdir -p "${SNAP_COMMON}/data"
-rclone copy --config "${RCLONE_CONFIG_FILE}" \
+rclone copy --config "${RCLONE_TEMP_CONFIG}" \
   --min-size 1b "${SNAP_COMMON}/data/" "bagstore:/" 2>&1 || true

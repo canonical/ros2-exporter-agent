@@ -1,0 +1,22 @@
+# rclone configuration for ros2-exporter-agent
+#
+# Rename this file to 'rclone.conf' to activate it.
+#
+# This file configures the remote storage target used to upload
+# recorded ROS 2 bag files via rclone.
+#
+# Reference: https://rclone.org/docs/
+#
+# The configuration must define a remote named 'bagstore'.
+# Below is an example using SFTP with an alias:
+#
+[fileserver]
+type = sftp
+host = your.fileserver.example.com
+user = root
+port = 2222
+key_file = /root/snap/ros2-exporter-agent/common/device_rsa_key
+
+[bagstore]
+type = alias
+remote = fileserver:/var/lib/caddy-fileserver/robot-123

@@ -1,11 +1,13 @@
 #!/bin/sh -eu
 
-snapctl set config-ready=false
-
-#rclone.conf configuration
-snapctl set rclone-conf!
-
-# rosbag2-recorder configuration
-snapctl set rosbag2-recorder!
-
 mkdir -p "${SNAP_COMMON}/data"
+mkdir -p "${SNAP_COMMON}/local-configuration"
+
+# Place template files if they don't already exist
+if [ ! -f "${SNAP_COMMON}/local-configuration/rclone.conf.template" ]; then
+    cp "${SNAP}/usr/share/templates/rclone.conf.template" "${SNAP_COMMON}/local-configuration/rclone.conf.template"
+fi
+
+if [ ! -f "${SNAP_COMMON}/local-configuration/rosbag2-recorder.yaml.template" ]; then
+    cp "${SNAP}/usr/share/templates/rosbag2-recorder.yaml.template" "${SNAP_COMMON}/local-configuration/rosbag2-recorder.yaml.template"
+fi
