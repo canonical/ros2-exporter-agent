@@ -1,16 +1,34 @@
 name: ros2-exporter-agent
 base: core24
 version: git
-summary: ROS 2 data exporter
+summary: Record and export ROS 2 rosbags to S3, SFTP/SSH, and more
+
 description: |
-  The ROS 2 data exporter is recording ROS 2 data
-  and exporting them on a server for later consultation.
+  ros2-exporter-agent is a utility snap that records ROS 2
+  data into rosbags and automatically uploads them to a remote storage backend
+  for later consultation.
+
+  Point it at an S3 bucket or a simple SFTP/SSH server and
+  your robots will record and store their bags automatically.
+  Uploads are powered by rclone, so any rclone-supported backend works.
+  It also integrates with Canonical Observability Stack (COS) for fleet deployments.
+
+  Features:
+
+  - Automatic ROS 2 recording to rosbag2 (mcap), with topic selection by regex
+    and configurable bag size/duration rotation.
+  - Periodic synchronization of recorded bags to remote storage via rclone
+    (S3, SFTP/SSH, and any other rclone backend).
+  - Daily rotation of bags into fresh timestamped directories at midnight.
+  - Automatic cleanup of already-synced local bags to protect disk usage.
+  - Flexible configuration from a local file or shared over the
+    content-sharing interface for automated configuration.
 
   ## Configuration
 
   Configuration is loaded from two locations (in priority order):
 
-  1. Content sharing interface (`configuration-read`):
+  1. Content-sharing interface (`configuration-read`):
      /var/snap/ros2-exporter-agent/common/configuration/ros2-exporter-agent/
 
   2. Local configuration:
@@ -19,24 +37,44 @@ description: |
   Template files are placed in the local-configuration directory on install.
   Rename them (remove `.template` suffix) and edit to activate.
 
+  A reference content-sharing implementation is available at:
+  https://github.com/canonical/rob-cos-demo-configuration
+
   Required configuration files:
 
-  1. `rclone.conf` - rclone configuration for the storage server:
+  1. `rclone.conf` - rclone configuration defining a `bagstore` remote that
+     bags are uploaded to. Any rclone backend works, below are two common
+     examples.
+
+  Amazon S3 (or S3-compatible):
+  ```
+  [s3]
+  type = s3
+  provider = AWS
+  access_key_id = YOUR_ACCESS_KEY
+  secret_access_key = YOUR_SECRET_KEY
+  region = eu-west-1
+  [bagstore]
+  type = alias
+  remote = s3:my-bucket/robot-123
+  ```
+
+  SFTP/SSH server:
   ```
   [fileserver]
   type = sftp
   host = your.fileserver.example.com
   user = root
   port = 2222
-  key_file = /var/snap/ros2-exporter-agent/common/device_rsa_key
+  key_file = /var/snap/ros2-exporter-agent/common/<my_private_key>
   [bagstore]
   type = alias
-  remote = fileserver:/var/lib/caddy-fileserver/robot-123
+  remote = fileserver:/var/lib/robot-bags/robot-123
   ```
 
   2. `rosbag2-recorder.yaml` - recorder parameters:
   ```
-  cos_rosbag2_recorder:
+  ros2_exporter_agent_rosbag2_recorder:
     ros__parameters:
       record:
         regex: '.*'

@@ -8,7 +8,7 @@
 #
 # Example configuration:
 #
-cos_rosbag2_recorder:
+ros2_exporter_agent_rosbag2_recorder:
   ros__parameters:
     record:
       regex: '.*'
