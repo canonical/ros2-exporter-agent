@@ -11,30 +11,15 @@ In order for the synchronization to function, a server must be setup.
 
 ### Client setup
 - Generate an ssh key to access the server
-- Place the ssh key as well as the `config` file in `/root/snap/ros2-exporter-agent/common/.ssh` (the syncronization daemon will be running as root)
+- Place the ssh key in `/var/snap/ros2-exporter-agent/common/` (the synchronization daemon will be running as root)
 
-The `/root/snap/ros2-exporter-agent/common/.ssh` content should look like:
+The `/var/snap/ros2-exporter-agent/common/` content should look like:
 ```
 drwx------  2 root root 4.0K sept. 29 16:32 .
 drwx------ 14 root root 4.0K sept. 29 16:32 ..
--rw-------  1 root root   85 sept. 29 16:32 config
--rw-r--r--  1 root root  444 sept. 21 14:48 known_hosts
 -r--------  1 root root 1.7K sept. 29 16:29 <my_private_key>
 ```
 
-The `config` file should look like:
-```
-Host storage-server
-    User <server_user>
-    HostName <server_hostname>
-    IdentityFile /root/snap/ros2-exporter-agent/common/.ssh/<my_private_key>
-    UserKnownHostsFile /root/snap/ros2-exporter-agent/common/.ssh/known_hosts
-```
-
-If the known_hosts is not created, we can create it with:
-```
-sudo ssh-keyscan -H <server_hostanme> >> /root/snap/ros2-exporter-agent/common/.ssh/known_hosts
-```
 - The daemon daily-rotation will move the bags to a new timestamped directory at midnight. Make sure to have properly configured the time on the machine. This can be verified with `timedatectl status`.
 
 ### Server setup
@@ -43,9 +28,28 @@ sudo ssh-keyscan -H <server_hostanme> >> /root/snap/ros2-exporter-agent/common/.
 - Copy the public key of the client in the `~/.ssh/authorized_keys`
 
 
-## Snap parameters
-- `topic-regex`, topic regex to record for the bag recording, override the default "all" behaviour | unset by default
-- `topic-exclude`, topic regex to exclude for the bag recording, works on top of "all" and `topic-regex`. | unset by default
-- `storage-base-path`, path on the server to store the synchronized data | default to: "~/$HOSTNAME"
-- `max-bag-duration`, maximum bag duration in seconds before the bag file is split | default to: 300
-- `max-bag-size`, maximum bag size in bytes before the bag file is split | default to: 250000000
+## Configuration
+
+Configuration is loaded from two locations (in priority order):
+
+1. **Content sharing** (`configuration-read` interface):
+   `/var/snap/ros2-exporter-agent/common/configuration/ros2-exporter-agent/`
+
+2. **Local configuration**:
+   `/var/snap/ros2-exporter-agent/common/local-configuration/`
+
+On install, template files are placed in the local-configuration directory. Rename them to activate:
+- `rclone.conf.template` -> `rclone.conf`
+- `rosbag2-recorder.yaml.template` -> `rosbag2-recorder.yaml`
+
+### `rclone.conf`
+
+Full `rclone` configuration used by the synchronization daemon. It must define the `bagstore` remote used by `sync.sh`.
+
+Reference: https://rclone.org/docs/
+
+### `rosbag2-recorder.yaml`
+
+YAML parameters passed to `rosbag2_transport recorder` as `--params-file`.
+
+Reference: https://github.com/ros2/rosbag2/tree/rolling/rosbag2_transport

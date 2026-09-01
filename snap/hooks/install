@@ -1,15 +1,13 @@
-#!/bin/sh -e
+#!/bin/sh -eu
 
-# parameters to be set by the user
-snapctl set device-uid!
-snapctl set topic-regex!
-snapctl set topic-exclude!
+mkdir -p "${SNAP_COMMON}/data"
+mkdir -p "${SNAP_COMMON}/local-configuration"
 
-# default parameters
-snapctl set remote-server-ip!
-snapctl set remote-server-port=2222
-snapctl set storage-base-path="/var/lib/caddy-fileserver/"
-snapctl set max-bag-duration=300 # 5 mins
-snapctl set max-bag-size=250000000 # 250 MB
+# Place template files if they don't already exist
+if [ ! -f "${SNAP_COMMON}/local-configuration/rclone.conf.template" ]; then
+    cp "${SNAP}/usr/share/templates/rclone.conf.template" "${SNAP_COMMON}/local-configuration/rclone.conf.template"
+fi
 
-mkdir -p $SNAP_COMMON/data
+if [ ! -f "${SNAP_COMMON}/local-configuration/rosbag2-recorder.yaml.template" ]; then
+    cp "${SNAP}/usr/share/templates/rosbag2-recorder.yaml.template" "${SNAP_COMMON}/local-configuration/rosbag2-recorder.yaml.template"
+fi

@@ -1,42 +1,45 @@
-#!/usr/bin/bash -e
+#!/usr/bin/bash -eu
 
-STORAGE_PATH="$(snapctl get storage-base-path)"
-REMOTE_SERVER_IP="$(snapctl get remote-server-ip)"
-REMOTE_SERVER_PORT="$(snapctl get remote-server-port)"
-DEVICE_ID="$(snapctl get device-uid)"
+# Content sharing takes priority over local configuration
+CONTENT_CONFIG_DIR="${SNAP_COMMON}/configuration/ros2-exporter-agent"
+LOCAL_CONFIG_DIR="${SNAP_COMMON}/local-configuration"
 
-if [ -n "$DEVICE_ID" ]; then
-    STORAGE_PATH="${STORAGE_PATH%/}/$DEVICE_ID"
-    snapctl set storage-path=$STORAGE_PATH
+if [ -f "${CONTENT_CONFIG_DIR}/rclone.conf" ]; then
+  RCLONE_CONFIG_FILE="${CONTENT_CONFIG_DIR}/rclone.conf"
+elif [ -f "${LOCAL_CONFIG_DIR}/rclone.conf" ]; then
+  RCLONE_CONFIG_FILE="${LOCAL_CONFIG_DIR}/rclone.conf"
 else
-    >&2 echo "DEVICE_ID is not set. Make sure it's available in the rob-cos-data-sharing snap."
+  logger -t "${SNAP_NAME}" "Rclone configuration file not found."
+  exit 1
 fi
+
+# Rclone creates temp files in the same directory as its config for
+# atomic saves and env var replacement (see configfile.go Save()).
+# See: https://github.com/rclone/rclone/issues/3655
+# The content sharing configuration mount is read-only,
+# We must copy to a writable location.
+RCLONE_TEMP_CONFIG="$(mktemp "${SNAP_COMMON}/rclone.conf.XXXXXX")"
+trap 'rm -f "${RCLONE_TEMP_CONFIG}"' EXIT
+cp "${RCLONE_CONFIG_FILE}" "${RCLONE_TEMP_CONFIG}"
+
+logger -t "${SNAP_NAME}" "Starting sync."
 
 # We copy the private key so that we can modify the permissions. 
-# The content-sharing interfce sets the permissions to 644 
+# The content-sharing interface sets the permissions to 644
 # which are too loose for the key to be used safely. We cannot 
 # modify the permission before because the content sharing snap
-# imposes it's own permission and this snap has read-only access.
+# imposes its own permission and this snap has read-only access.
 # The alternative would be to give this snap write access. 
 
-if [ -f $SNAP_COMMON/rob-cos-shared-data/device_rsa_key ]; then
-    cp $SNAP_COMMON/rob-cos-shared-data/device_rsa_key  $SNAP_USER_COMMON/
-    chmod 600 $SNAP_USER_COMMON/device_rsa_key
+if [ -f "${SNAP_COMMON}/rob-cos-shared-data/device_rsa_key" ]; then
+    cp "${SNAP_COMMON}/rob-cos-shared-data/device_rsa_key" "${SNAP_USER_COMMON}/"
+    chmod 600 "${SNAP_USER_COMMON}/device_rsa_key"
 else
-    >&2 echo "could not find device_rsa_key. Make sure it's available in the rob-cos-data-sharing snap."
+    >&2 echo "could not find device_rsa_key. If you need, make sure it's available in the rob-cos-data-sharing snap."
 fi
 
-
-cat > $SNAP_USER_COMMON/config <<EOF
-Host storage-server
-    User root
-    HostName $REMOTE_SERVER_IP
-    StrictHostKeyChecking no
-    UserKnownHostsFile=/dev/null
-    IdentityFile $SNAP_USER_COMMON/device_rsa_key
-EOF
-
-echo "SSH config file and keys setup completed."
+echo "Starting to copy the files with Rclone."
 
 mkdir -p "${SNAP_COMMON}/data"
-rsync -avz -e "ssh -F ${SNAP_USER_COMMON}/config -p ${REMOTE_SERVER_PORT}" --min-size=1 "${SNAP_COMMON}/data/" "storage-server:${STORAGE_PATH}" 2>&1 || true
+rclone copy --config "${RCLONE_TEMP_CONFIG}" \
+  --min-size 1b "${SNAP_COMMON}/data/" "bagstore:/" 2>&1 || true
