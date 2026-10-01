@@ -137,7 +137,6 @@ parts:
       - ros-lyrical-autoware-internal-debug-msgs
       - ros-lyrical-autoware-internal-localization-msgs
       - ros-lyrical-autoware-internal-metric-msgs
-      - ros-lyrical-autoware-internal-msgs
       - ros-lyrical-autoware-internal-perception-msgs
       - ros-lyrical-autoware-internal-planning-msgs
       - ros-lyrical-autoware-localization-msgs
@@ -153,7 +152,6 @@ parts:
       - ros-lyrical-can-msgs
       - ros-lyrical-cartographer-ros-msgs
       - ros-lyrical-cascade-lifecycle-msgs
-      - ros-lyrical-clearpath-motor-msgs
       - ros-lyrical-clearpath-msgs
       - ros-lyrical-clearpath-platform-msgs
       - ros-lyrical-cob-msgs
