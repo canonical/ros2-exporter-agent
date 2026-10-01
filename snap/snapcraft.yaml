@@ -145,9 +145,7 @@ parts:
       - ros-lyrical-autoware-planning-msgs
       - ros-lyrical-autoware-sensing-msgs
       - ros-lyrical-autoware-system-msgs
-      - ros-lyrical-autoware-v2x-msgs
       - ros-lyrical-autoware-vehicle-msgs
-      - ros-lyrical-axis-msgs
       - ros-lyrical-camera-aravis2-msgs
       - ros-lyrical-can-msgs
       - ros-lyrical-cartographer-ros-msgs
