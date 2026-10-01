@@ -120,7 +120,6 @@ parts:
       - ros-lyrical-ackermann-nlmpc-msgs
       - ros-lyrical-action-msgs
       - ros-lyrical-actuator-msgs
-      - ros-lyrical-agnocast-cie-config-msgs
       - ros-lyrical-apriltag-msgs
       - ros-lyrical-aruco-msgs
       - ros-lyrical-aruco-opencv-msgs
@@ -168,7 +167,6 @@ parts:
       - ros-lyrical-etsi-its-cpm-ts-msgs
       - ros-lyrical-etsi-its-denm-msgs
       - ros-lyrical-etsi-its-mcm-uulm-msgs
-      - ros-lyrical-etsi-its-spatem-ts-msgs
       - ros-lyrical-etsi-its-vam-ts-msgs
       - ros-lyrical-event-camera-msgs
       - ros-lyrical-ffmpeg-image-transport-msgs
