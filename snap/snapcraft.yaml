@@ -1,5 +1,5 @@
 name: ros2-exporter-agent
-base: core24
+base: core26
 version: git
 summary: Record and export ROS 2 rosbags to S3, SFTP/SSH, and more
 
