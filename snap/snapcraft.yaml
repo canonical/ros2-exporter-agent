@@ -258,7 +258,6 @@ parts:
       - ros-lyrical-off-highway-premium-radar-sample-msgs
       - ros-lyrical-off-highway-radar-msgs
       - ros-lyrical-off-highway-uss-msgs
-      - ros-lyrical-open-sound-control-msgs
       - ros-lyrical-orbbec-camera-msgs
       - ros-lyrical-ouster-sensor-msgs
       - ros-lyrical-pal-statistics-msgs
