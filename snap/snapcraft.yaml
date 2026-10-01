@@ -143,7 +143,6 @@ parts:
       - ros-lyrical-autoware-localization-msgs
       - ros-lyrical-autoware-map-msgs
       - ros-lyrical-autoware-msgs
-      - ros-lyrical-autoware-perception-msgs
       - ros-lyrical-autoware-planning-msgs
       - ros-lyrical-autoware-sensing-msgs
       - ros-lyrical-autoware-system-msgs
@@ -183,7 +182,6 @@ parts:
       - ros-lyrical-etsi-its-denm-msgs
       - ros-lyrical-etsi-its-mapem-ts-msgs
       - ros-lyrical-etsi-its-mcm-uulm-msgs
-      - ros-lyrical-etsi-its-msgs
       - ros-lyrical-etsi-its-spatem-ts-msgs
       - ros-lyrical-etsi-its-vam-ts-msgs
       - ros-lyrical-event-camera-msgs
