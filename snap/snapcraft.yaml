@@ -150,7 +150,6 @@ parts:
       - ros-lyrical-clearpath-msgs
       - ros-lyrical-clearpath-platform-msgs
       - ros-lyrical-cob-msgs
-      - ros-lyrical-compass-msgs
       - ros-lyrical-continental-msgs
       - ros-lyrical-control-msgs
       - ros-lyrical-controller-manager-msgs
@@ -276,7 +275,6 @@ parts:
       - ros-lyrical-rmf-traffic-msgs
       - ros-lyrical-rmf-visualization-msgs
       - ros-lyrical-rmf-workcell-msgs
-      - ros-lyrical-robosense-msgs
       - ros-lyrical-robot-calibration-msgs
       - ros-lyrical-ros-babel-fish-test-msgs
       - ros-lyrical-ros2-medkit-msgs
