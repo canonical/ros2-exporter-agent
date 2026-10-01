@@ -223,7 +223,6 @@ parts:
       - ros-lyrical-micro-ros-msgs
       - ros-lyrical-microstrain-inertial-msgs
       - ros-lyrical-mobileye-560-660-msgs
-      - ros-lyrical-mocap4r2-msgs
       - ros-lyrical-mola-msgs
       - ros-lyrical-moveit-msgs
       - ros-lyrical-moveit-task-constructor-msgs
