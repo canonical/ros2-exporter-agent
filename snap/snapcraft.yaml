@@ -144,7 +144,6 @@ parts:
       - ros-lyrical-autoware-sensing-msgs
       - ros-lyrical-autoware-system-msgs
       - ros-lyrical-autoware-vehicle-msgs
-      - ros-lyrical-camera-aravis2-msgs
       - ros-lyrical-can-msgs
       - ros-lyrical-cartographer-ros-msgs
       - ros-lyrical-cascade-lifecycle-msgs
@@ -197,7 +196,6 @@ parts:
       - ros-lyrical-ibeo-msgs
       - ros-lyrical-irobot-create-msgs
       - ros-lyrical-kartech-linear-actuator-msgs
-      - ros-lyrical-kinematic-pose-msgs
       - ros-lyrical-leo-msgs
       - ros-lyrical-lgsvl-msgs
       - ros-lyrical-lifecycle-msgs
