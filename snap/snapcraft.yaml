@@ -138,7 +138,6 @@ parts:
       - ros-lyrical-autoware-internal-localization-msgs
       - ros-lyrical-autoware-internal-metric-msgs
       - ros-lyrical-autoware-internal-perception-msgs
-      - ros-lyrical-autoware-internal-planning-msgs
       - ros-lyrical-autoware-localization-msgs
       - ros-lyrical-autoware-map-msgs
       - ros-lyrical-autoware-msgs
@@ -158,7 +157,6 @@ parts:
       - ros-lyrical-control-msgs
       - ros-lyrical-controller-manager-msgs
       - ros-lyrical-cras-msgs
-      - ros-lyrical-create3-examples-msgs
       - ros-lyrical-cx-msgs
       - ros-lyrical-data-tamer-msgs
       - ros-lyrical-dataspeed-can-msgs
