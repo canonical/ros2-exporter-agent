@@ -123,7 +123,6 @@ parts:
       - ros-lyrical-actuator-msgs
       - ros-lyrical-agnocast-cie-config-msgs
       - ros-lyrical-apriltag-msgs
-      - ros-lyrical-aruco-markers-msgs
       - ros-lyrical-aruco-msgs
       - ros-lyrical-aruco-opencv-msgs
       - ros-lyrical-automotive-autonomy-msgs
@@ -135,7 +134,6 @@ parts:
       - ros-lyrical-autoware-common-msgs
       - ros-lyrical-autoware-control-msgs
       - ros-lyrical-autoware-internal-debug-msgs
-      - ros-lyrical-autoware-internal-localization-msgs
       - ros-lyrical-autoware-internal-metric-msgs
       - ros-lyrical-autoware-internal-perception-msgs
       - ros-lyrical-autoware-map-msgs
