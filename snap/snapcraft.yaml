@@ -181,7 +181,6 @@ parts:
       - ros-lyrical-etsi-its-cam-ts-msgs
       - ros-lyrical-etsi-its-cpm-ts-msgs
       - ros-lyrical-etsi-its-denm-msgs
-      - ros-lyrical-etsi-its-denm-ts-msgs
       - ros-lyrical-etsi-its-mapem-ts-msgs
       - ros-lyrical-etsi-its-mcm-uulm-msgs
       - ros-lyrical-etsi-its-msgs
@@ -270,7 +269,6 @@ parts:
       - ros-lyrical-play-motion2-msgs
       - ros-lyrical-plotjuggler-msgs
       - ros-lyrical-polygon-msgs
-      - ros-lyrical-ptz-action-server-msgs
       - ros-lyrical-radar-msgs
       - ros-lyrical-raspimouse-msgs
       - ros-lyrical-rc-common-msgs
