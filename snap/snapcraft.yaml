@@ -119,7 +119,6 @@ parts:
       - ros-lyrical-ackermann-msgs
       - ros-lyrical-ackermann-nlmpc-msgs
       - ros-lyrical-action-msgs
-      - ros-lyrical-actionlib-msgs
       - ros-lyrical-actuator-msgs
       - ros-lyrical-agnocast-cie-config-msgs
       - ros-lyrical-apriltag-msgs
@@ -145,7 +144,6 @@ parts:
       - ros-lyrical-can-msgs
       - ros-lyrical-cartographer-ros-msgs
       - ros-lyrical-cascade-lifecycle-msgs
-      - ros-lyrical-clearpath-msgs
       - ros-lyrical-clearpath-platform-msgs
       - ros-lyrical-cob-msgs
       - ros-lyrical-continental-msgs
