@@ -174,7 +174,6 @@ parts:
       - ros-lyrical-four-wheel-steering-msgs
       - ros-lyrical-foxglove-msgs
       - ros-lyrical-fuse-msgs
-      - ros-lyrical-gazebo-msgs
       - ros-lyrical-geographic-msgs
       - ros-lyrical-geometry-msgs
       - ros-lyrical-gps-msgs
@@ -183,7 +182,6 @@ parts:
       - ros-lyrical-grbl-msgs
       - ros-lyrical-hri-actions-msgs
       - ros-lyrical-hri-msgs
-      - ros-lyrical-husarion-ugv-msgs
       - ros-lyrical-ibeo-msgs
       - ros-lyrical-irobot-create-msgs
       - ros-lyrical-kartech-linear-actuator-msgs
