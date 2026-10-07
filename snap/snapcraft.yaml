@@ -144,7 +144,6 @@ parts:
       - ros-lyrical-cartographer-ros-msgs
       - ros-lyrical-cascade-lifecycle-msgs
       - ros-lyrical-clearpath-platform-msgs
-      - ros-lyrical-cob-msgs
       - ros-lyrical-continental-msgs
       - ros-lyrical-control-msgs
       - ros-lyrical-controller-manager-msgs
@@ -182,7 +181,6 @@ parts:
       - ros-lyrical-graph-msgs
       - ros-lyrical-grasping-msgs
       - ros-lyrical-grbl-msgs
-      - ros-lyrical-grid-map-msgs
       - ros-lyrical-hri-actions-msgs
       - ros-lyrical-hri-msgs
       - ros-lyrical-husarion-ugv-msgs
